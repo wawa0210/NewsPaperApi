@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PaperNewsService.Application;
 using WebApi.Filter;
 using WebApi.FrameWork;
 
@@ -83,6 +84,7 @@ namespace WebApi
             // The generic ILogger<TCategoryName> service was added to the ServiceCollection by ASP.NET Core.
             // It was then registered with Autofac using the Populate method in ConfigureServices.
             builder.Register(c => new AccountService()).As<IAccountService>().InstancePerLifetimeScope();
+            builder.Register(c => new NewsService()).As<INewsService>().InstancePerLifetimeScope();
             //builder.Register(c => new MuseumService(c.Resolve<EfDbContext>())).As<IMuseumService>().InstancePerLifetimeScope();
             //builder.Register(c => new AntiquesClassService(c.Resolve<EfDbContext>())).As<IAntiquesClassService>().InstancePerLifetimeScope();
             //builder.Register(c => new AntiquesService(c.Resolve<EfDbContext>())).As<IAntiquesService>().InstancePerLifetimeScope();

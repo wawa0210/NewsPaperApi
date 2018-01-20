@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
     <ProjectReference Include="..\EmergencyAccount\EmergencyAccount.csproj" />
+    <ProjectReference Include="..\PaperNewsService\PaperNewsService.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
