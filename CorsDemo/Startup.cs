@@ -2,26 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Exceptionless;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using WebApi.Filter;
-using WebApi.FrameWork;
 
-namespace WebApi
+namespace CorsDemo
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-             .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -39,24 +33,20 @@ namespace WebApi
                     .AllowCredentials();
                 });
             });
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(ValidationActionFilter));
-            });
+
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("any");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseCors("any");
-            MapperInit.InitMapping();
-            app.UseExceptionless("riuCGjWnRDEXcvLASaeRHVdYE9OxHyFtb9SBXPvU");
-            app.UseMiddleware<ExceptionHandlerMiddleWare>();
+
             app.UseMvc();
         }
     }

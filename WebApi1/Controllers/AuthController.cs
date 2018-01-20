@@ -1,10 +1,11 @@
 ﻿using CommonLib;
 using EmergencyAccount.Application;
 using EmergencyAccount.Entity;
+using Exceptionless.Json;
 using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -14,20 +15,12 @@ namespace WebApi.Controllers
     {
         private IAccountService IAccountService { get; set; }
 
-        ///// <summary>
-        ///// 初始化(autofac 已经注入)
-        ///// </summary>
-        //public AuthController(IAccountService _iAccountService)
-        //{
-        //    IAccountService = _iAccountService;
-        //}
-
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        public AuthController()
+        public AuthController(IAccountService _iAccountService)
         {
-            IAccountService = new AccountService();
+            IAccountService = _iAccountService;
         }
 
         /// <summary>

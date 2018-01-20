@@ -43,7 +43,7 @@ namespace PaperNewsService.Application
         /// </summary>
         /// <param name="newsId"></param>
         /// <returns></returns>
-        Task DisableNewsAsync(string newsId);
+        Task UpdateNewStatusAsync(EntityNewStatus entityNewStatus);
 
     }
 }

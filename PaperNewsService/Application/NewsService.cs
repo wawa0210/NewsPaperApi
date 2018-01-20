@@ -118,13 +118,25 @@ namespace PaperNewsService.Application
             var model = await NewsRep.FindAsync(x => x.NewsId == entityNews.NewsId);
             if (model == null) return;
 
-            model.Title = entityNews.Title;
-            model.ShortContent = entityNews.ShortContent;
-            model.NewsContent = entityNews.Content;
-            model.HrefUrl = entityNews.HrefUrl;
+            model.Title = entityNews.Title ?? model.Title;
+            model.ShortContent = entityNews.ShortContent ?? model.ShortContent;
+            model.NewsContent = entityNews.Content ?? model.NewsContent;
+            model.HrefUrl = entityNews.HrefUrl ?? model.HrefUrl;
             model.IsEnable = entityNews.IsEnable;
             model.UpdateTime = DateTime.Now;
             NewsRep.Update(model);
+        }
+
+        public async Task UpdateNewStatusAsync(EntityNewStatus entityNewStatus)
+        {
+            var NewsRep = GetRepositoryInstance<TableNews>();
+            var model = await NewsRep.FindAsync(x => x.NewsId == entityNewStatus.NewsId);
+            model.IsEnable = entityNewStatus.IsEnable;
+            model.UpdateTime = DateTime.Now;
+            NewsRep.Update<TableNews>(model, item => new
+            {
+                item.IsEnable
+            });
         }
     }
 }
