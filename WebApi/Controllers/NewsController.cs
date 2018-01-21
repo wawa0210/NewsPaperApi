@@ -15,12 +15,20 @@ namespace WebApi.Controllers
     {
         private INewsService _iNewsService { get; set; }
 
+        ///// <summary>
+        ///// 初始化(autofac 已经注入)
+        ///// </summary>
+        //public NewsController(INewsService iNewsService)
+        //{
+        //    _iNewsService = iNewsService;
+        //}
+
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        public NewsController(INewsService iNewsService)
+        public NewsController()
         {
-            _iNewsService = iNewsService;
+            _iNewsService = new NewsService();
         }
 
         /// <summary>

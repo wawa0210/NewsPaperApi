@@ -71,7 +71,7 @@ namespace PaperNewsService.Application
 
             if (!string.IsNullOrEmpty(entityNewQuery.Title))
             {
-                strTotalSql.Append(" and  Title like '%' + @title +'%' ;");
+                strTotalSql.Append(" and  Title like @title ");
             }
 
             //分页信息
@@ -88,7 +88,7 @@ namespace PaperNewsService.Application
 
             if (!string.IsNullOrEmpty(entityNewQuery.Title))
             {
-                strSql.Append(" and  Title like '%' + @title +'%' ");
+                strSql.Append(" and  Title like @title ");
             }
             strSql.Append(@"
                             order by createTime desc
@@ -98,7 +98,7 @@ namespace PaperNewsService.Application
             var paras = new DynamicParameters(new
             {
                 isEnable = entityNewQuery.IsEnable,
-                title = entityNewQuery.Title,
+                title = "%" + entityNewQuery.Title + "%",
                 startIndex = (entityNewQuery.CurrentPage - 1) * entityNewQuery.PageSize,
                 endIndex = entityNewQuery.CurrentPage * entityNewQuery.PageSize
             });
