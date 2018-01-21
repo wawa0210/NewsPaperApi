@@ -39,6 +39,13 @@ namespace PaperNewsService.Application
         Task<EntityNews> GetNewsIntfByIdAsync(string newsId);
 
         /// <summary>
+        /// 获得新闻分享图片信息
+        /// </summary>
+        /// <param name="newsId"></param>
+        /// <returns></returns>
+        Task<string> GetNewsShareImgAsync(string newsId);
+
+        /// <summary>
         /// 下线新闻
         /// </summary>
         /// <param name="newsId"></param>

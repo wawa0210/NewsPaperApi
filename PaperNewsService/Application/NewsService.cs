@@ -9,6 +9,8 @@ using Dapper;
 using EmergencyBaseService;
 using EmergencyData.MicroOrm.SqlGenerator;
 using EmergencyEntity.PageQuery;
+using MagickNetService;
+using MagickNetService.Entity;
 using PaperNewsService.Entity;
 using PaperNewsService.Model;
 
@@ -51,6 +53,17 @@ namespace PaperNewsService.Application
             var NewsRep = GetRepositoryInstance<TableNews>();
             var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
             return Mapper.Map<TableNews, EntityNews>(model);
+        }
+
+        public async Task<string> GetNewsShareImgAsync(string newsId)
+        {
+            var news = await GetNewsIntfByIdAsync(newsId);
+            if (news == null) return "";
+            return new MagickService().GenerateNewImg(new EntityNewsModel
+            {
+                Title = news.Title,
+                Content = news.ShortContent
+            });
         }
 
         public async Task<PageBase<EntityListNews>> GetPageCompanyAsync(EntityNewQuery entityNewQuery)

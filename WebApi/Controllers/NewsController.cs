@@ -44,6 +44,18 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// 获得新闻分享图片
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("{newsId}/shareimgs")]
+        public async Task<ResponseModel> GetNewsShareImgByIdAsync(string newsId)
+        {
+            if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
+            return Success(await _iNewsService.GetNewsShareImgAsync(newsId));
+        }
+
+        /// <summary>
         /// 添加新闻信息
         /// </summary>
         /// <returns></returns>

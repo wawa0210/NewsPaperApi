@@ -12,6 +12,7 @@
     <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
     <ProjectReference Include="..\EmergencyBaseService\EmergencyBaseService.csproj" />
     <ProjectReference Include="..\EmergencyEntity\EmergencyEntity.csproj" />
+    <ProjectReference Include="..\MagickNetService\MagickNetService.csproj" />
   </ItemGroup>
 
 </Project>
