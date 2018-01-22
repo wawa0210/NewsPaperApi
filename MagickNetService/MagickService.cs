@@ -11,15 +11,17 @@ namespace MagickNetService
     {
         public string GenerateNewImg(EntityNewsModel entityNewsModel)
         {
-            var imgUrl = GuidExtens.GuidTo16String() + ".jpg";
+            var imgUrl = "Imgs/" + GuidExtens.GuidTo16String() + ".jpg";
             var wordsArray = SplitByLen(entityNewsModel.Content, 23);
             var titleArray = SplitByLen(entityNewsModel.Title, 14);
 
-            var titleHeight = titleArray.Length * 40 + 10;
+            var titleHeight = titleArray.Length * 60 + 30;
             var contentHeight = wordsArray.Length * 40 + 40;
             var microsoftYaheiUi = "SimHei";
+            var picHeight = titleHeight + contentHeight + 200 + 50;
+            var lineColor = new MagickColor("gray");
 
-            using (var mainImgImage = new MagickImage(new MagickColor("#f8f8f6"), 500, titleHeight + contentHeight))
+            using (var mainImgImage = new MagickImage(new MagickColor("#f8f8f6"), 500, picHeight))
             {
                 using (var image = new MagickImage(new MagickColor("#f8f8f6"), 500, titleHeight))
                 {
@@ -32,10 +34,12 @@ namespace MagickNetService
                             .FillColor(new MagickColor(255, 0, 0))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
-                            .Text(30, 20 + 40 * i, titleArray[i])
+                            .Text(30, 40 + 40 * i, titleArray[i])
                             .Draw(image);
                     }
                     mainImgImage.Composite(image, 0, 0, CompositeOperator.Over);
+                    //头部间隔线
+                    new Drawables().StrokeWidth(1).StrokeColor(lineColor).Line(20, titleHeight + 20, 480, titleHeight + 20).Draw(mainImgImage);
                 }
 
                 using (var image = new MagickImage(new MagickColor("#f8f8f6"), 500, contentHeight))
@@ -52,12 +56,11 @@ namespace MagickNetService
                             .Text(30, 20 + 40 * i, wordsArray[i])
                             .Draw(image);
                     }
-
-                    mainImgImage.Composite(image, 0, titleHeight + 20, CompositeOperator.Over);
+                    //尾部
+                    new Drawables().StrokeWidth(1).StrokeColor(lineColor).Line(20, picHeight - 200, 480, picHeight - 200).Draw(mainImgImage);
                 }
-                mainImgImage.Write("Imgs/" + imgUrl);
+                mainImgImage.Write(imgUrl);
             }
-
             return imgUrl;
         }
 
