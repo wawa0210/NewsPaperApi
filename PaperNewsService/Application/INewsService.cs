@@ -43,7 +43,7 @@ namespace PaperNewsService.Application
         /// </summary>
         /// <param name="newsId"></param>
         /// <returns></returns>
-        Task<string> GetNewsShareImgAsync(string newsId);
+        Task<byte[]> GetNewsShareImgAsync(string newsId);
 
         /// <summary>
         /// 下线新闻

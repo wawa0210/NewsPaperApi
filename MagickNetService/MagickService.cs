@@ -9,7 +9,7 @@ namespace MagickNetService
 {
     public class MagickService
     {
-        public string GenerateNewImg(EntityNewsModel entityNewsModel)
+        public byte[] GenerateNewImg(EntityNewsModel entityNewsModel)
         {
             var imgUrl = "Imgs/" + GuidExtens.GuidTo16String() + ".jpg";
             var wordsArray = SplitByLen(entityNewsModel.Content, 23);
@@ -59,9 +59,10 @@ namespace MagickNetService
                     //尾部
                     new Drawables().StrokeWidth(1).StrokeColor(lineColor).Line(20, picHeight - 200, 480, picHeight - 200).Draw(mainImgImage);
                 }
-                mainImgImage.Write(imgUrl);
+                //mainImgImage.Write(imgUrl);
+                return mainImgImage.ToByteArray(MagickFormat.Jpg);
             }
-            return imgUrl;
+            //return imgUrl;
         }
 
         private string[] SplitByLen(string str, int separatorCharNum)

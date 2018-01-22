@@ -55,10 +55,10 @@ namespace PaperNewsService.Application
             return Mapper.Map<TableNews, EntityNews>(model);
         }
 
-        public async Task<string> GetNewsShareImgAsync(string newsId)
+        public async Task<byte[]> GetNewsShareImgAsync(string newsId)
         {
             var news = await GetNewsIntfByIdAsync(newsId);
-            if (news == null) return "";
+            if (news == null) return null;
             return new MagickService().GenerateNewImg(new EntityNewsModel
             {
                 Title = news.Title,

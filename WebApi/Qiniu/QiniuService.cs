@@ -1,4 +1,5 @@
-﻿using Qiniu.IO;
+﻿using CommonLib;
+using Qiniu.IO;
 using Qiniu.IO.Model;
 using Qiniu.Util;
 using System;
@@ -10,12 +11,11 @@ namespace WebApi.Qiniu
 {
     public class QiniuService
     {
-        public string UploadImg()
+        public string UploadImg(byte[] imgdata)
         {
             var mac = new Mac("gXBXI5GVEAZweMD7v9roKmRhcode8fFtnxjd-RkB", "lPqZgqyP3DM8ibLNwq7C5JAzj8Am9_Dhq3vx9IiM");
             var bucket = "qcode";
-            var saveKey = "wawa021011.jpg";
-            var localFile = "D:\\wawa.jpg";
+            var saveKey = GuidExtens.GuidTo16String() + ".jpg";
 
             // 上传策略，参见 
             // https://developer.qiniu.com/kodo/manual/put-policy
@@ -31,8 +31,8 @@ namespace WebApi.Qiniu
             // https://developer.qiniu.com/kodo/manual/upload-token            
             var jstr = putPolicy.ToJsonString();
             var token = Auth.CreateUploadToken(mac, jstr);
-            var um = new UploadManager();
-            var result = um.UploadFile(localFile, saveKey, token);
+            var formUploader = new FormUploader();
+            var result = formUploader.UploadData(imgdata, saveKey, token);
             return saveKey;
         }
     }

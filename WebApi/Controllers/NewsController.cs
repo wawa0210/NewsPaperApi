@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using PaperNewsService.Application;
 using PaperNewsService.Entity;
 using WebApi.Models;
+using WebApi.Qiniu;
 
 namespace WebApi.Controllers
 {
@@ -39,8 +40,8 @@ namespace WebApi.Controllers
         [Route("{newsId}")]
         public async Task<ResponseModel> GetNewsbyIdAsync(string newsId)
         {
-            if(string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
-            return Success( await _iNewsService.GetNewsIntfByIdAsync(newsId));
+            if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
+            return Success(await _iNewsService.GetNewsIntfByIdAsync(newsId));
         }
 
         /// <summary>
@@ -52,7 +53,10 @@ namespace WebApi.Controllers
         public async Task<ResponseModel> GetNewsShareImgByIdAsync(string newsId)
         {
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
-            return Success(await _iNewsService.GetNewsShareImgAsync(newsId));
+            var imgByte = await _iNewsService.GetNewsShareImgAsync(newsId);
+            if (imgByte == null) return Fail(ErrorCodeEnum.ServerError);
+
+            return Success("http://p2193b0mp.bkt.clouddn.com" + new QiniuService().UploadImg(imgByte));
         }
 
         /// <summary>
@@ -100,7 +104,7 @@ namespace WebApi.Controllers
         [Route("")]
         public async Task<ResponseModel> GetPageNewsAsync([FromQuery] EntityNewQuery entityNewQuery)
         {
-            return Success( await _iNewsService.GetPageCompanyAsync(entityNewQuery));
+            return Success(await _iNewsService.GetPageCompanyAsync(entityNewQuery));
         }
     }
 }

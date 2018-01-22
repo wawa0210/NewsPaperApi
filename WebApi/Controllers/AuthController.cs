@@ -79,7 +79,7 @@ namespace WebApi.Controllers
             //      .Draw(image);
             //    image.Write("wawa.jpg");
             //};
-            return Success(new QiniuService().UploadImg());
+            return Success(new QiniuService().UploadImg(null));
         }
     }
 }
