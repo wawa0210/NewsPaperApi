@@ -20,6 +20,8 @@ namespace WebApi
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseKestrel()
+                .UseUrls("http://localhost:2300")
                 .Build();
     }
 }

@@ -25,4 +25,10 @@
     <ProjectReference Include="..\PaperNewsService\PaperNewsService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Qiniu">
+      <HintPath>..\lib\Qiniu.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -15,4 +15,10 @@
     <ProjectReference Include="..\MagickNetService\MagickNetService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Qiniu">
+      <HintPath>..\lib\Qiniu.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
