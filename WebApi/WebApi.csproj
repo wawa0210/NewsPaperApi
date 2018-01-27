@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EmergencyAccount\EmergencyAccount.csproj" />
     <ProjectReference Include="..\PaperNewsService\PaperNewsService.csproj" />
+    <ProjectReference Include="..\UeditorService\UeditorService.csproj" />
   </ItemGroup>
 
   <ItemGroup>
