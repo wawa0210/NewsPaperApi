@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UeditorService;
+using UeditorService.Entity;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -34,9 +35,20 @@ namespace WebApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("")]
-        public ResponseModel UeditorFiles()
+        public void UeditorFiles()
         {
-            return Success("");
+            var action = HttpContext.Request.Query["action"].ToString();
+            //上传图片信息
+            if (action== "uploadimage")
+            {
+                var uploadConfig = new UploadConfig
+                {
+                    AllowExtensions = Config.GetStringList("imageAllowFiles"),
+                    PathFormat = Config.GetString("imagePathFormat"),
+                    SizeLimit = Config.GetInt("imageMaxSize"),
+                    UploadFieldName = Config.GetString("imageFieldName")
+                };
+            }
         }
 
         /// <summary>
