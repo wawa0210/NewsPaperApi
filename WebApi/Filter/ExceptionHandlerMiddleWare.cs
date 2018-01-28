@@ -39,7 +39,7 @@ namespace WebApi.Filter
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             if (exception == null) return;
-            await WriteExceptionAsync(context, exception).ConfigureAwait(false);
+            await WriteExceptionAsync(context, exception);
         }
 
         private static async Task WriteExceptionAsync(HttpContext context, Exception exception)
@@ -64,8 +64,7 @@ namespace WebApi.Filter
             }
             else
             {
-                response.ContentType = "application/json";
-                await response.WriteAsync(exception.Message).ConfigureAwait(false);
+                await response.WriteAsync(exception.Message);
             }
         }
 
