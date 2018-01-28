@@ -21,5 +21,12 @@ namespace EmergencyAccount.Application
         /// <param name="dbPwd"></param>
         /// <returns></returns>
         bool CheckLoginInfo(string inputPwd, string salt, string dbPwd);
+
+        /// <summary>
+        /// 更新密码
+        /// </summary>
+        /// <param name="entityAccountPwd"></param>
+        /// <returns></returns>
+        Task UpdateAccountPwd(EntityAccountPwd entityAccountPwd);
     }
 }
