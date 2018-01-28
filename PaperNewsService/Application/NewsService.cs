@@ -28,8 +28,8 @@ namespace PaperNewsService.Application
                 Title = entityNews.Title,
                 ShortContent = entityNews.ShortContent,
                 NewsContent = entityNews.Content,
-                CreateTime = DateTime.Now,
-                UpdateTime = DateTime.Now,
+                CreateTime = DateTime.Now.ToString("YYYY-MM-DD hh:mm:ss"),
+                UpdateTime = DateTime.Now.ToString("YYYY-MM-DD hh:mm:ss"),
                 IsEnable = true,
                 HrefUrl = entityNews.HrefUrl ?? ""
             };
@@ -41,7 +41,7 @@ namespace PaperNewsService.Application
             var NewsRep = GetRepositoryInstance<TableNews>();
             var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
             model.IsEnable = false;
-            model.UpdateTime = DateTime.Now;
+            model.UpdateTime = DateTime.Now.ToString("YYYY-MM-DD hh:mm:ss");
             NewsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable
@@ -136,7 +136,7 @@ namespace PaperNewsService.Application
             model.NewsContent = entityNews.Content ?? model.NewsContent;
             model.HrefUrl = entityNews.HrefUrl ?? model.HrefUrl;
             model.IsEnable = entityNews.IsEnable;
-            model.UpdateTime = DateTime.Now;
+            model.UpdateTime = DateTime.Now.ToString("YYYY-MM-DD hh:mm:ss");
             NewsRep.Update(model);
         }
 
@@ -145,7 +145,7 @@ namespace PaperNewsService.Application
             var NewsRep = GetRepositoryInstance<TableNews>();
             var model = await NewsRep.FindAsync(x => x.NewsId == entityNewStatus.NewsId);
             model.IsEnable = entityNewStatus.IsEnable;
-            model.UpdateTime = DateTime.Now;
+            model.UpdateTime = DateTime.Now.ToString("YYYY-MM-DD hh:mm:ss");
             NewsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable

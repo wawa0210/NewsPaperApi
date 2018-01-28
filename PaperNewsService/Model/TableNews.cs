@@ -76,7 +76,7 @@ namespace PaperNewsService.Model
         /// </summary>
         [Column("CreateTime")]
         [Description("创建时间")]
-        public DateTime CreateTime
+        public string CreateTime
         {
             get; set;
         }
@@ -86,7 +86,7 @@ namespace PaperNewsService.Model
         /// </summary>
         [Column("UpdateTime")]
         [Description("更新时间")]
-        public DateTime UpdateTime
+        public string UpdateTime
         {
             get; set;
         }
