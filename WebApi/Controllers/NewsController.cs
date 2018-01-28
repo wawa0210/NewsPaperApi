@@ -56,7 +56,7 @@ namespace WebApi.Controllers
             var imgByte = await _iNewsService.GetNewsShareImgAsync(newsId);
             if (imgByte == null) return Fail(ErrorCodeEnum.ServerError);
 
-            return Success("http://img.xiaozhang.info" + new QiniuService().UploadImg(imgByte));
+            return Success("http://img.xiaozhang.info/" + new QiniuService().UploadImg(imgByte));
         }
 
         /// <summary>
