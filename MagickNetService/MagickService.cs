@@ -3,6 +3,7 @@ using ImageMagick;
 using MagickNetService.Entity;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace MagickNetService
@@ -12,55 +13,66 @@ namespace MagickNetService
         public byte[] GenerateNewImg(EntityNewsModel entityNewsModel)
         {
             var imgUrl = "Imgs/" + GuidExtens.GuidTo16String() + ".jpg";
-            var wordsArray = SplitByLen(entityNewsModel.Content, 23);
+            var wordsArray = SplitByLen(entityNewsModel.Content, 20);
             var titleArray = SplitByLen(entityNewsModel.Title, 14);
 
-            var titleHeight = titleArray.Length * 60 + 30;
-            var contentHeight = wordsArray.Length * 40 + 40;
+            var titleHeight = titleArray.Length * 100 + 100;
+            var contentHeight = wordsArray.Length * 80 + 80;
             var microsoftYaheiUi = "SimHei";
-            var picHeight = titleHeight + contentHeight + 200 + 50;
+            var picHeight = titleHeight + contentHeight + 50;
             var lineColor = new MagickColor("gray");
 
-            using (var mainImgImage = new MagickImage(new MagickColor("#f8f8f6"), 500, picHeight))
+            using (var image = new MagickImage(new MagickColor("#f8f8f6"), 1080, picHeight + 550))
             {
-                using (var image = new MagickImage(new MagickColor("#f8f8f6"), 500, titleHeight))
+                using (var mainImgImage = new MagickImage(new MagickColor("#f8f8f6"), 900, picHeight))
                 {
+                    //title
                     for (var i = 0; i < titleArray.Length; i++)
                     {
                         new Drawables()
                             .TextEncoding(Encoding.UTF8)
                             .TextAntialias(true)
-                            .FontPointSize(30)
-                            .FillColor(new MagickColor(255, 0, 0))
+                            .FontPointSize(58)
+                            .FillColor(new MagickColor("#4D4D4D"))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
-                            .Text(30, 40 + 40 * i, titleArray[i])
-                            .Draw(image);
-                    }
-                    mainImgImage.Composite(image, 0, 0, CompositeOperator.Over);
-                    //头部间隔线
-                    new Drawables().StrokeWidth(1).StrokeColor(lineColor).Line(20, titleHeight + 20, 480, titleHeight + 20).Draw(mainImgImage);
-                }
+                            .Text(30, 80 + 90 * i, titleArray[i])
+                            .Draw(mainImgImage);
 
-                using (var image = new MagickImage(new MagickColor("#f8f8f6"), 500, contentHeight))
-                {
+                    }
+                    //头部间隔线
+                    new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(50, titleHeight, 850, titleHeight).Draw(mainImgImage);
+
                     for (var i = 0; i < wordsArray.Length; i++)
                     {
                         new Drawables()
                             .TextEncoding(Encoding.UTF8)
                             .TextAntialias(true)
-                            .FontPointSize(20)
-                            .FillColor(new MagickColor(255, 0, 0))
+                            .FontPointSize(40)
+                            .FillColor(new MagickColor("#4D4D4D"))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
-                            .Text(30, 20 + 40 * i, wordsArray[i])
-                            .Draw(image);
+                            .Text(30, titleHeight + 70 + 80 * i, wordsArray[i])
+                            .Draw(mainImgImage);
                     }
                     //尾部
-                    new Drawables().StrokeWidth(1).StrokeColor(lineColor).Line(20, picHeight - 200, 480, picHeight - 200).Draw(mainImgImage);
+                    //new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(20, picHeight - 180, 880, picHeight - 180).Draw(mainImgImage);
+                    mainImgImage.Border(1);
+                    mainImgImage.BorderColor = new MagickColor("#4D4D4D");
+
+                    image.Composite(mainImgImage, 90, 150, CompositeOperator.Over);
                 }
-                //mainImgImage.Write(imgUrl);
-                return mainImgImage.ToByteArray(MagickFormat.Jpg);
+
+                //小程序二维码 
+                var client = new WebClient();
+                using (var watermark = new MagickImage(client.DownloadData("http://img.xiaozhang.info/wechatCode.jpg")))
+                {
+                    var size = new MagickGeometry(200, 200) { IgnoreAspectRatio = true };
+                    watermark.Resize(size);
+                    watermark.Evaluate(Channels.Black, EvaluateOperator.Divide, 4);
+                    image.Composite(watermark, 440, picHeight + 230, CompositeOperator.Over);
+                }
+                return image.ToByteArray(MagickFormat.Jpg);
             }
             //return imgUrl;
         }
