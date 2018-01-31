@@ -58,16 +58,23 @@ namespace PaperNewsService.Application
             return Mapper.Map<TableNews, EntityNews>(model);
         }
 
-        public async Task<byte[]> GetNewsShareImgAsync(string newsId)
+        public async Task<string> GetNewsShareImgAsync(string newsId)
         {
-            var news = await GetNewsIntfByIdAsync(newsId);
-            if (news == null) return null;
-            return new MagickService().GenerateNewImg(new EntityNewsModel
-            {
-                Title = news.Title,
-                Content = news.ShortContent
-            });
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == newsId);
+            return model.NewsImgUrl;
         }
+
+        //public async Task<byte[]> GetNewsShareImgAsync(string newsId)
+        //{
+        //    var news = await GetNewsIntfByIdAsync(newsId);
+        //    if (news == null) return null;
+        //    return new MagickService().GenerateNewImg(new EntityNewsModel
+        //    {
+        //        Title = news.Title,
+        //        Content = news.ShortContent
+        //    });
+        //}
 
         public byte[] GetNewsShareImgAsync(string title, string shortContent)
         {

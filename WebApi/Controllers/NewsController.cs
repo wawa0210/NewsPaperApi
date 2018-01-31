@@ -53,10 +53,9 @@ namespace WebApi.Controllers
         public async Task<ResponseModel> GetNewsShareImgByIdAsync(string newsId)
         {
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
-            var imgByte = await _iNewsService.GetNewsShareImgAsync(newsId);
-            if (imgByte == null) return Fail(ErrorCodeEnum.ServerError);
-
-            return Success(UploadQiNiu(imgByte));
+            var imgUrl = await _iNewsService.GetNewsShareImgAsync(newsId);
+            if (string.IsNullOrWhiteSpace(imgUrl)) return Fail(ErrorCodeEnum.ServerError);
+            return Success(imgUrl);
         }
 
         private string UploadQiNiu(byte[] byteImgs)
