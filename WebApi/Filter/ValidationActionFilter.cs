@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using WebApi.Models;
 
 namespace WebApi.Filter
@@ -16,6 +17,8 @@ namespace WebApi.Filter
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            var filter = context.Filters.Any(item => item is IAllowAnonymousFilter);
+
             var modelState = context.ModelState;
             if (!modelState.IsValid)
             {
