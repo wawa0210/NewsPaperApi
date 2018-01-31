@@ -82,6 +82,16 @@ namespace PaperNewsService.Model
         }
 
         /// <summary>
+        /// 图片新闻地址
+        /// </summary>
+        [Column("NewsImgUrl")]
+        [Description("图片新闻地址")]
+        public string NewsImgUrl
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// 更新时间
         /// </summary>
         [Column("UpdateTime")]

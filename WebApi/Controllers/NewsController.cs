@@ -56,7 +56,19 @@ namespace WebApi.Controllers
             var imgByte = await _iNewsService.GetNewsShareImgAsync(newsId);
             if (imgByte == null) return Fail(ErrorCodeEnum.ServerError);
 
-            return Success("http://img.xiaozhang.info/" + new QiniuService().UploadImg(imgByte));
+            return Success(UploadQiNiu(imgByte));
+        }
+
+        private string UploadQiNiu(byte[] byteImgs)
+        {
+            return "http://img.xiaozhang.info/" + new QiniuService().UploadImg(byteImgs);
+        }
+
+        private async Task UpdateNewsImgAsync(EntityNews entityNews)
+        {
+            var imgUrl = UploadQiNiu(_iNewsService.GetNewsShareImgAsync(entityNews.Title,entityNews.ShortContent));
+            await _iNewsService.UpateNewsImgAsync(entityNews.NewsId, imgUrl);
+
         }
 
         /// <summary>
@@ -67,7 +79,8 @@ namespace WebApi.Controllers
         [Route("")]
         public async Task<ResponseModel> AddNewsAsync([FromBody]EntityNews entityNews)
         {
-            await _iNewsService.AddNewsAsync(entityNews);
+            var newsInfo = await _iNewsService.AddNewsAsync(entityNews);
+            await UpdateNewsImgAsync(newsInfo);
             return Success("新增成功");
         }
 
@@ -81,6 +94,7 @@ namespace WebApi.Controllers
         {
             if (string.IsNullOrEmpty(entityNews.NewsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
             await _iNewsService.UpateNewsAsync(entityNews);
+            await UpdateNewsImgAsync(entityNews);
             return Success("更新成功");
         }
 

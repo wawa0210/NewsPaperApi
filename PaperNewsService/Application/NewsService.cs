@@ -18,9 +18,9 @@ namespace PaperNewsService.Application
 {
     public class NewsService : BaseAppService, INewsService
     {
-        public async Task AddNewsAsync(EntityNews entityNews)
+        public async Task<EntityNews> AddNewsAsync(EntityNews entityNews)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
+            var newsRep = GetRepositoryInstance<TableNews>();
 
             var model = new TableNews
             {
@@ -31,18 +31,21 @@ namespace PaperNewsService.Application
                 CreateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
                 UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
                 IsEnable = true,
-                HrefUrl = entityNews.HrefUrl ?? ""
+                HrefUrl = entityNews.HrefUrl ?? "",
+                NewsImgUrl = ""
             };
-            await NewsRep.InsertAsync(model);
+            await newsRep.InsertAsync(model);
+            entityNews.NewsId = model.NewsId;
+            return entityNews;
         }
 
         public async Task DisableNewsAsync(string newsId)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
-            var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == newsId);
             model.IsEnable = false;
             model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
-            NewsRep.Update<TableNews>(model, item => new
+            newsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable
             });
@@ -50,8 +53,8 @@ namespace PaperNewsService.Application
 
         public async Task<EntityNews> GetNewsIntfByIdAsync(string newsId)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
-            var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == newsId);
             return Mapper.Map<TableNews, EntityNews>(model);
         }
 
@@ -63,6 +66,15 @@ namespace PaperNewsService.Application
             {
                 Title = news.Title,
                 Content = news.ShortContent
+            });
+        }
+
+        public byte[] GetNewsShareImgAsync(string title, string shortContent)
+        {
+            return new MagickService().GenerateNewImg(new EntityNewsModel
+            {
+                Title = title,
+                Content = shortContent
             });
         }
 
@@ -115,20 +127,20 @@ namespace PaperNewsService.Application
                 startIndex = (entityNewQuery.CurrentPage - 1) * entityNewQuery.PageSize,
                 endIndex = entityNewQuery.CurrentPage * entityNewQuery.PageSize
             });
-            var NewsRep = GetRepositoryInstance<TableNews>();
+            var newsRep = GetRepositoryInstance<TableNews>();
 
             var sqlQuery = new SqlQuery(strSql.ToString(), paras);
-            var listResult = await NewsRep.FindAllAsync(sqlQuery);
+            var listResult = await newsRep.FindAllAsync(sqlQuery);
             result.Items = Mapper.Map<List<TableNews>, List<EntityListNews>>(listResult.AsList());
-            result.TotalCounts = NewsRep.Connection.ExecuteScalar<int>(strTotalSql.ToString(), paras);
+            result.TotalCounts = newsRep.Connection.ExecuteScalar<int>(strTotalSql.ToString(), paras);
             result.TotalPages = Convert.ToInt32(Math.Ceiling(result.TotalCounts / (entityNewQuery.PageSize * 1.0)));
             return result;
         }
 
         public async Task UpateNewsAsync(EntityNews entityNews)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
-            var model = await NewsRep.FindAsync(x => x.NewsId == entityNews.NewsId);
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == entityNews.NewsId);
             if (model == null) return;
 
             model.Title = entityNews.Title ?? model.Title;
@@ -137,16 +149,31 @@ namespace PaperNewsService.Application
             model.HrefUrl = entityNews.HrefUrl ?? model.HrefUrl;
             model.IsEnable = entityNews.IsEnable;
             model.UpdateTime = DateTime.Now.ToString("yyyy-MM-DD hh:mm:ss");
-            NewsRep.Update(model);
+            newsRep.Update(model);
+        }
+
+        /// <summary>
+        /// 更新商品分析图片
+        /// </summary>
+        /// <param name="newsId"></param>
+        /// <param name="newsImgUrl"></param>
+        /// <returns></returns>
+        public async Task UpateNewsImgAsync(string newsId, string newsImgUrl)
+        {
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == newsId);
+            if (model == null) return;
+            model.NewsImgUrl = newsImgUrl;
+            newsRep.Update(model);
         }
 
         public async Task UpdateNewStatusAsync(EntityNewStatus entityNewStatus)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
-            var model = await NewsRep.FindAsync(x => x.NewsId == entityNewStatus.NewsId);
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == entityNewStatus.NewsId);
             model.IsEnable = entityNewStatus.IsEnable;
             model.UpdateTime = DateTime.Now.ToString("yyyy-MM-DD hh:mm:ss");
-            NewsRep.Update<TableNews>(model, item => new
+            newsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable
             });
