@@ -117,6 +117,8 @@ namespace WebApi.Controllers
         [Route("")]
         public async Task<ResponseModel> GetPageNewsAsync([FromQuery] EntityNewQuery entityNewQuery)
         {
+
+
             return Success(await _iNewsService.GetPageCompanyAsync(entityNewQuery));
         }
     }

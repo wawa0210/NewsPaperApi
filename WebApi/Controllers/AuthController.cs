@@ -5,6 +5,7 @@ using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using WebApi.FrameWork;
 using WebApi.Models;
 using WebApi.Qiniu;
 
@@ -13,7 +14,7 @@ namespace WebApi.Controllers
     [Route("v0/auth")]
     public class AuthController : BaseApiController
     {
-        private IAccountService IAccountService { get; set; }
+        private IAccountService AccountService { get; set; }
 
         ///// <summary>
         ///// 初始化(autofac 已经注入)
@@ -28,7 +29,7 @@ namespace WebApi.Controllers
         /// </summary>
         public AuthController()
         {
-            IAccountService = new AccountService();
+            AccountService = new AccountService();
         }
 
         /// <summary>
@@ -40,46 +41,19 @@ namespace WebApi.Controllers
         [Route("token")]
         public ResponseModel GetAccountAuth([FromBody]EntityLoginModel loginModel)
         {
-            var result = IAccountService.GetAccountManager(loginModel.UserName);
+            var result = AccountService.GetAccountManager(loginModel.UserName);
 
             if (result == null) return Fail(ErrorCodeEnum.UserIsNull);
 
-            var checkResult = IAccountService.CheckLoginInfo(loginModel.UserPwd, result.UserSalt, result.UserPwd);
+            var checkResult = AccountService.CheckLoginInfo(loginModel.UserPwd, result.UserSalt, result.UserPwd);
             if (!checkResult) return Fail(ErrorCodeEnum.UserPwdCheckFaild);
 
+            loginModel.UserPwd = "";
             return Success(new
             {
-                token = AesHelper.Encrypt(JsonConvert.SerializeObject(result)),
+                token = JwtManager.GenerateToken(loginModel),
                 userInfo = result
             });
-        }
-
-
-        /// <summary>
-        /// 获得token 登录
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet, HttpOptions]
-        [AllowAnonymous]
-        [Route("token")]
-        public ResponseModel GetAccountAuth1()
-        {
-            //using (var image = new MagickImage(new MagickColor("#ff00ff"), 512, 128))
-            //{
-            //    new Drawables()
-            //      .FontPointSize(72)
-            //      .Font("Comic Sans")
-            //      .StrokeColor(new MagickColor("yellow"))
-            //      .FillColor(MagickColors.Orange)
-            //      .TextAlignment(TextAlignment.Center)
-            //      .Text(256, 64, "Magick.NET")
-            //      .StrokeColor(new MagickColor(0, Quantum.Max, 0))
-            //      .FillColor(MagickColors.SaddleBrown)
-            //      .Ellipse(256, 96, 192, 8, 0, 360)
-            //      .Draw(image);
-            //    image.Write("wawa.jpg");
-            //};
-            return Success(new QiniuService().UploadImg(null));
         }
     }
 }
