@@ -34,6 +34,7 @@ namespace WebApi.FrameWork
                  .ForMember(x => x.ShortContent, y => y.MapFrom(z => z.ShortContent))
                  .ForMember(x => x.HrefUrl, y => y.MapFrom(z => z.HrefUrl))
                  .ForMember(x => x.CreateTime, y => y.MapFrom(z => z.CreateTime))
+                 .ForMember(x => x.IsEnable, y => y.MapFrom(z => z.IsEnable))
                  .ForAllOtherMembers(x => x.Ignore());
             }
             );

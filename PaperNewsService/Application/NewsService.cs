@@ -39,6 +39,21 @@ namespace PaperNewsService.Application
             return entityNews;
         }
 
+        /// <summary>
+        ///删除新闻
+        /// </summary>
+        /// <param name="newsId"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteNewsAsync(string newsId)
+        {
+            var NewsRep = GetRepositoryInstance<TableNews>();
+            var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
+            if (model == null) return false;
+            if (model.IsEnable) return false;
+            NewsRep.Delete(model);
+            return true;
+        }
+
         public async Task DisableNewsAsync(string newsId)
         {
             var newsRep = GetRepositoryInstance<TableNews>();
@@ -99,7 +114,12 @@ namespace PaperNewsService.Application
             //计算总数
             strTotalSql.Append(@"        
                             SELECT  COUNT(1)
-                            FROM    T_News where isEnable=@isEnable  ");
+                            FROM    T_News where 1=1  ");
+
+            if (!entityNewQuery.IsAll)
+            {
+                strTotalSql.Append(" and isEnable = @isEnable ");
+            }
 
             if (!string.IsNullOrEmpty(entityNewQuery.Title))
             {
@@ -116,7 +136,12 @@ namespace PaperNewsService.Application
                                HrefUrl ,
                                CreateTime ,
                                UpdateTime ,
-                               IsEnable FROM T_News where isEnable=@isEnable ");
+                               IsEnable FROM T_News where 1=1 ");
+
+            if (!entityNewQuery.IsAll)
+            {
+                strSql.Append(" and isEnable=@isEnable ");
+            }
 
             if (!string.IsNullOrEmpty(entityNewQuery.Title))
             {
@@ -142,6 +167,26 @@ namespace PaperNewsService.Application
             result.TotalCounts = newsRep.Connection.ExecuteScalar<int>(strTotalSql.ToString(), paras);
             result.TotalPages = Convert.ToInt32(Math.Ceiling(result.TotalCounts / (entityNewQuery.PageSize * 1.0)));
             return result;
+        }
+
+        /// <summary>
+        /// 重新上线新闻
+        /// </summary>
+        /// <param name="newsId"></param>
+        /// <returns></returns>
+        public async Task<bool> RestoreNewsAsync(string newsId)
+        {
+            var NewsRep = GetRepositoryInstance<TableNews>();
+            var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
+            if (model == null) return false;
+            model.IsEnable = true;
+
+            NewsRep.Update<TableNews>(model, item => new
+            {
+                item.IsEnable
+            });
+
+            return true;
         }
 
         public async Task UpateNewsAsync(EntityNews entityNews)

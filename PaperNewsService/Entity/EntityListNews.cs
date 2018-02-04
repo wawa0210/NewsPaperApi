@@ -39,6 +39,14 @@ namespace PaperNewsService.Entity
         }
 
         /// <summary>
+        /// 是否可用
+        /// </summary>
+        public bool IsEnable
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreateTime

@@ -43,6 +43,32 @@ namespace WebApi.Controllers
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
             return Success(await _iNewsService.GetNewsIntfByIdAsync(newsId));
         }
+        
+        /// <summary>
+        /// 删除新闻
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("{newsId}")]
+        public async Task<ResponseModel> DeleteNewsInfo(string newsId)
+        {
+            if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
+            await _iNewsService.DeleteNewsAsync(newsId);
+            return Success("保存成功");
+        }
+
+        /// <summary>
+        /// 删除新闻
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("{newsId}/restore")]
+        public async Task<ResponseModel> RestoreNewsInfo(string newsId)
+        {
+            if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
+            await _iNewsService.RestoreNewsAsync(newsId);
+            return Success("保存成功");
+        }
 
         /// <summary>
         /// 获得新闻分享图片
@@ -108,6 +134,8 @@ namespace WebApi.Controllers
             await _iNewsService.UpdateNewStatusAsync(entityNewStatus);
             return Success("保存成功");
         }
+
+        
 
         /// <summary>
         /// 分页获得新闻信息

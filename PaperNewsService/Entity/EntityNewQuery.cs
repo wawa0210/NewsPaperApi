@@ -9,6 +9,7 @@ namespace PaperNewsService.Entity
     {
         public EntityNewQuery()
         {
+            IsAll = false;
             IsEnable = true;
         }
         /// <summary>
@@ -22,6 +23,14 @@ namespace PaperNewsService.Entity
         /// 是否上线
         /// </summary>
         public bool IsEnable
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// 筛选所有
+        /// </summary>
+        public bool IsAll
         {
             get; set;
         }

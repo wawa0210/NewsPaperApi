@@ -54,6 +54,11 @@ namespace PaperNewsService.Application
         /// <returns></returns>
         byte[] GetNewsShareImgAsync(string title, string shortContent);
 
+
+        Task<bool> DeleteNewsAsync(string newsId);
+
+        Task<bool> RestoreNewsAsync(string newsId);
+
         /// <summary>
         /// 下线新闻
         /// </summary>
