@@ -200,7 +200,7 @@ namespace PaperNewsService.Application
             model.NewsContent = entityNews.Content ?? model.NewsContent;
             model.HrefUrl = entityNews.HrefUrl ?? model.HrefUrl;
             model.IsEnable = entityNews.IsEnable;
-            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-DD hh:mm:ss");
+            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
             newsRep.Update(model);
         }
 
@@ -224,7 +224,7 @@ namespace PaperNewsService.Application
             var newsRep = GetRepositoryInstance<TableNews>();
             var model = await newsRep.FindAsync(x => x.NewsId == entityNewStatus.NewsId);
             model.IsEnable = entityNewStatus.IsEnable;
-            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-DD hh:mm:ss");
+            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
             newsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable
