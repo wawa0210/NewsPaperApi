@@ -7,11 +7,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EmergencyEntity.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace WebApi.Qiniu
 {
     public class QiniuService
     {
+
+        private AppSettings AppSettings { get; set; }
+
+        /// <summary>
+        /// 初始化(autofac 已经注入)
+        /// </summary>
+        public QiniuService(IOptions<AppSettings> settings)
+        {
+            AppSettings = settings.Value;
+        }
+
         public string UploadImg(byte[] imgdata)
         {
             var saveKey = GuidExtens.GuidTo16String() + ".jpg";
@@ -23,9 +36,9 @@ namespace WebApi.Qiniu
 
         public string GetToken()
         {
-            var applicationKey = "y3Fil8mtyT_45kQjKeSE6H7rNHr1ke1hUGq0sV6R";
-            var mac = new Mac(applicationKey, "ghVAWRTHaxR21x3qClTabEwnjAQiW4wdVi0dTnap");
-            const string bucket = "blockcomet-news";
+            var applicationKey = AppSettings.QiNiuConfig.ApplicationKey;
+            var mac = new Mac(applicationKey, AppSettings.QiNiuConfig.SecretKey);
+            var bucket = AppSettings.QiNiuConfig.Bucket;
             var putPolicy = new PutPolicy { Scope = bucket };
             Config.AutoZone(applicationKey, bucket, useHTTPS: true);
 

@@ -56,31 +56,31 @@ namespace WebApi.Controllers
         }
 
 
-        /// <summary>
-        /// 获得token 登录
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet, HttpOptions]
-        [AllowAnonymous]
-        [Route("token")]
-        public ResponseModel GetAccountAuth1()
-        {
-            //using (var image = new MagickImage(new MagickColor("#ff00ff"), 512, 128))
-            //{
-            //    new Drawables()
-            //      .FontPointSize(72)
-            //      .Font("Comic Sans")
-            //      .StrokeColor(new MagickColor("yellow"))
-            //      .FillColor(MagickColors.Orange)
-            //      .TextAlignment(TextAlignment.Center)
-            //      .Text(256, 64, "Magick.NET")
-            //      .StrokeColor(new MagickColor(0, Quantum.Max, 0))
-            //      .FillColor(MagickColors.SaddleBrown)
-            //      .Ellipse(256, 96, 192, 8, 0, 360)
-            //      .Draw(image);
-            //    image.Write("wawa.jpg");
-            //};
-            return Success(new QiniuService().UploadImg(null));
-        }
+        ///// <summary>
+        ///// 获得token 登录
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpGet, HttpOptions]
+        //[AllowAnonymous]
+        //[Route("token")]
+        //public ResponseModel GetAccountAuth1()
+        //{
+        //    //using (var image = new MagickImage(new MagickColor("#ff00ff"), 512, 128))
+        //    //{
+        //    //    new Drawables()
+        //    //      .FontPointSize(72)
+        //    //      .Font("Comic Sans")
+        //    //      .StrokeColor(new MagickColor("yellow"))
+        //    //      .FillColor(MagickColors.Orange)
+        //    //      .TextAlignment(TextAlignment.Center)
+        //    //      .Text(256, 64, "Magick.NET")
+        //    //      .StrokeColor(new MagickColor(0, Quantum.Max, 0))
+        //    //      .FillColor(MagickColors.SaddleBrown)
+        //    //      .Ellipse(256, 96, 192, 8, 0, 360)
+        //    //      .Draw(image);
+        //    //    image.Write("wawa.jpg");
+        //    //};
+        //    return Success(new QiniuService().UploadImg(null));
+        //}
     }
 }
