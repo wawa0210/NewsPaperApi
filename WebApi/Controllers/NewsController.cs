@@ -89,7 +89,7 @@ namespace WebApi.Controllers
 
         private string UploadQiNiu(byte[] byteImgs)
         {
-            return AppSettings.ImgUrl + new QiniuService().UploadImg(byteImgs);
+            return AppSettings.QiNiuConfig.ImgUrl + new QiniuService().UploadImg(byteImgs);
         }
 
         private async Task UpdateNewsImgAsync(EntityNews entityNews)
