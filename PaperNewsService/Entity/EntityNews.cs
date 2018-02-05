@@ -51,6 +51,14 @@ namespace PaperNewsService.Entity
         }
 
         /// <summary>
+        /// 媒体信息
+        /// </summary>
+        public string Media
+        {
+            get;set;
+        }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreateTime

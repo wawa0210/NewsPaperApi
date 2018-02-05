@@ -17,7 +17,6 @@ namespace WebApi.Controllers
     public class NewsController : BaseApiController
     {
         private INewsService NewsService { get; set; }
-
         private AppSettings AppSettings { get; set; }
       
         private QiniuService qiniuService { get; set; }

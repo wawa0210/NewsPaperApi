@@ -72,6 +72,16 @@ namespace PaperNewsService.Model
         }
 
         /// <summary>
+        /// 媒体信息
+        /// </summary>
+        [Column("Media")]
+        [Description("媒体信息")]
+        public string Media
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         [Column("CreateTime")]

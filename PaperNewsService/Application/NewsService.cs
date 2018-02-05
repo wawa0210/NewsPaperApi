@@ -32,6 +32,7 @@ namespace PaperNewsService.Application
                 UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
                 IsEnable = true,
                 HrefUrl = entityNews.HrefUrl ?? "",
+                Media = entityNews.Media ?? "",
                 NewsImgUrl = ""
             };
             await newsRep.InsertAsync(model);
@@ -199,6 +200,7 @@ namespace PaperNewsService.Application
             model.ShortContent = entityNews.ShortContent ?? model.ShortContent;
             model.NewsContent = entityNews.Content ?? model.NewsContent;
             model.HrefUrl = entityNews.HrefUrl ?? model.HrefUrl;
+            model.Media = entityNews.Media ?? model.Media;
             model.IsEnable = entityNews.IsEnable;
             model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
             newsRep.Update(model);

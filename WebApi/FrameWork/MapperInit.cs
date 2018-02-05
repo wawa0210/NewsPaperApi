@@ -26,6 +26,7 @@ namespace WebApi.FrameWork
                    .ForMember(x => x.CreateTime, y => y.MapFrom(z => z.CreateTime))
                    .ForMember(x => x.UpdateTime, y => y.MapFrom(z => z.UpdateTime))
                    .ForMember(x => x.IsEnable, y => y.MapFrom(z => z.IsEnable))
+                   .ForMember(x => x.Media, y => y.MapFrom(z => z.Media))
                    .ForAllOtherMembers(x => x.Ignore());
 
                 cfg.CreateMap<TableNews, EntityListNews>()
@@ -35,6 +36,7 @@ namespace WebApi.FrameWork
                  .ForMember(x => x.HrefUrl, y => y.MapFrom(z => z.HrefUrl))
                  .ForMember(x => x.CreateTime, y => y.MapFrom(z => z.CreateTime))
                  .ForMember(x => x.IsEnable, y => y.MapFrom(z => z.IsEnable))
+                 .ForMember(x => x.Media, y => y.MapFrom(z => z.Media))
                  .ForAllOtherMembers(x => x.Ignore());
             }
             );
