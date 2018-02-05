@@ -1,9 +1,11 @@
 ﻿using CommonLib;
 using EmergencyAccount.Application;
 using EmergencyAccount.Entity;
+using EmergencyEntity.Configuration;
 using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WebApi.Models;
 using WebApi.Qiniu;
@@ -13,8 +15,7 @@ namespace WebApi.Controllers
     [Route("v0/auth")]
     public class AuthController : BaseApiController
     {
-        private IAccountService IAccountService { get; set; }
-
+        private IAccountService AccountService { get; set; }
         ///// <summary>
         ///// 初始化(autofac 已经注入)
         ///// </summary>
@@ -28,7 +29,7 @@ namespace WebApi.Controllers
         /// </summary>
         public AuthController()
         {
-            IAccountService = new AccountService();
+            AccountService = new AccountService();
         }
 
         /// <summary>
@@ -40,11 +41,11 @@ namespace WebApi.Controllers
         [Route("token")]
         public ResponseModel GetAccountAuth([FromBody]EntityLoginModel loginModel)
         {
-            var result = IAccountService.GetAccountManager(loginModel.UserName);
+            var result = AccountService.GetAccountManager(loginModel.UserName);
 
             if (result == null) return Fail(ErrorCodeEnum.UserIsNull);
 
-            var checkResult = IAccountService.CheckLoginInfo(loginModel.UserPwd, result.UserSalt, result.UserPwd);
+            var checkResult = AccountService.CheckLoginInfo(loginModel.UserPwd, result.UserSalt, result.UserPwd);
             if (!checkResult) return Fail(ErrorCodeEnum.UserPwdCheckFaild);
 
             return Success(new

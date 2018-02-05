@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EmergencyEntity.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PaperNewsService.Application;
 using PaperNewsService.Entity;
 using WebApi.Models;
@@ -14,8 +16,9 @@ namespace WebApi.Controllers
     [Route("v0/news")]
     public class NewsController : BaseApiController
     {
-        private INewsService _iNewsService { get; set; }
+        private INewsService NewsService { get; set; }
 
+        private AppSettings AppSettings { get; set; }
         ///// <summary>
         ///// 初始化(autofac 已经注入)
         ///// </summary>
@@ -27,11 +30,11 @@ namespace WebApi.Controllers
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        public NewsController()
+        public NewsController(IOptions<AppSettings> settings)
         {
-            _iNewsService = new NewsService();
+            AppSettings = settings.Value;
+            NewsService = new NewsService();
         }
-
         /// <summary>
         /// 获得新闻详细信息
         /// </summary>
@@ -41,7 +44,7 @@ namespace WebApi.Controllers
         public async Task<ResponseModel> GetNewsbyIdAsync(string newsId)
         {
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
-            return Success(await _iNewsService.GetNewsIntfByIdAsync(newsId));
+            return Success(await NewsService.GetNewsIntfByIdAsync(newsId));
         }
         
         /// <summary>
@@ -53,7 +56,7 @@ namespace WebApi.Controllers
         public async Task<ResponseModel> DeleteNewsInfo(string newsId)
         {
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
-            await _iNewsService.DeleteNewsAsync(newsId);
+            await NewsService.DeleteNewsAsync(newsId);
             return Success("保存成功");
         }
 
@@ -66,7 +69,7 @@ namespace WebApi.Controllers
         public async Task<ResponseModel> RestoreNewsInfo(string newsId)
         {
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
-            await _iNewsService.RestoreNewsAsync(newsId);
+            await NewsService.RestoreNewsAsync(newsId);
             return Success("保存成功");
         }
 
@@ -79,20 +82,20 @@ namespace WebApi.Controllers
         public async Task<ResponseModel> GetNewsShareImgByIdAsync(string newsId)
         {
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
-            var imgUrl = await _iNewsService.GetNewsShareImgAsync(newsId);
+            var imgUrl = await NewsService.GetNewsShareImgAsync(newsId);
             if (string.IsNullOrWhiteSpace(imgUrl)) return Fail(ErrorCodeEnum.ServerError);
             return Success(imgUrl);
         }
 
         private string UploadQiNiu(byte[] byteImgs)
         {
-            return "http://img.xiaozhang.info/" + new QiniuService().UploadImg(byteImgs);
+            return AppSettings.ImgUrl + new QiniuService().UploadImg(byteImgs);
         }
 
         private async Task UpdateNewsImgAsync(EntityNews entityNews)
         {
-            var imgUrl = UploadQiNiu(_iNewsService.GetNewsShareImgAsync(entityNews.Title,entityNews.ShortContent));
-            await _iNewsService.UpateNewsImgAsync(entityNews.NewsId, imgUrl);
+            var imgUrl = UploadQiNiu(NewsService.GetNewsShareImgAsync(entityNews.Title,entityNews.ShortContent));
+            await NewsService.UpateNewsImgAsync(entityNews.NewsId, imgUrl);
 
         }
 
@@ -104,7 +107,7 @@ namespace WebApi.Controllers
         [Route("")]
         public async Task<ResponseModel> AddNewsAsync([FromBody]EntityNews entityNews)
         {
-            var newsInfo = await _iNewsService.AddNewsAsync(entityNews);
+            var newsInfo = await NewsService.AddNewsAsync(entityNews);
             await UpdateNewsImgAsync(newsInfo);
             return Success("新增成功");
         }
@@ -118,7 +121,7 @@ namespace WebApi.Controllers
         public async Task<ResponseModel> UpdateNewsAsync([FromBody]EntityNews entityNews)
         {
             if (string.IsNullOrEmpty(entityNews.NewsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
-            await _iNewsService.UpateNewsAsync(entityNews);
+            await NewsService.UpateNewsAsync(entityNews);
             await UpdateNewsImgAsync(entityNews);
             return Success("更新成功");
         }
@@ -131,12 +134,9 @@ namespace WebApi.Controllers
         [Route("status")]
         public async Task<ResponseModel> UpdateNewsStatus([FromBody]EntityNewStatus entityNewStatus)
         {
-            await _iNewsService.UpdateNewStatusAsync(entityNewStatus);
+            await NewsService.UpdateNewStatusAsync(entityNewStatus);
             return Success("保存成功");
         }
-
-        
-
         /// <summary>
         /// 分页获得新闻信息
         /// </summary>
@@ -145,7 +145,7 @@ namespace WebApi.Controllers
         [Route("")]
         public async Task<ResponseModel> GetPageNewsAsync([FromQuery] EntityNewQuery entityNewQuery)
         {
-            return Success(await _iNewsService.GetPageCompanyAsync(entityNewQuery));
+            return Success(await NewsService.GetPageCompanyAsync(entityNewQuery));
         }
     }
 }
