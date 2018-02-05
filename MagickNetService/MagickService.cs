@@ -33,7 +33,7 @@ namespace MagickNetService
                             .TextEncoding(Encoding.UTF8)
                             .TextAntialias(true)
                             .FontPointSize(58)
-                            .FillColor(new MagickColor("#4D4D4D"))
+                            .FillColor(new MagickColor("#856D32"))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
                             .Text(30, 80 + 90 * i, titleArray[i])
