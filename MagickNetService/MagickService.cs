@@ -22,9 +22,9 @@ namespace MagickNetService
             var picHeight = titleHeight + contentHeight + 50;
             var lineColor = new MagickColor("gray");
 
-            using (var image = new MagickImage(new MagickColor("#f8f8f6"), 1080, picHeight + 550))
+            using (var image = new MagickImage(new MagickColor("#F9F8F6"), 1080, picHeight + 550))
             {
-                using (var mainImgImage = new MagickImage(new MagickColor("#f8f8f6"), 900, picHeight))
+                using (var mainImgImage = new MagickImage(new MagickColor("#FFFFFF"), 900, picHeight))
                 {
                     //title
                     for (var i = 0; i < titleArray.Length; i++)
@@ -40,8 +40,16 @@ namespace MagickNetService
                             .Draw(mainImgImage);
 
                     }
-                    //头部间隔线
-                    new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(50, titleHeight, 850, titleHeight).Draw(mainImgImage);
+
+                    for (var i = 0; i < 82; i++)
+                    {
+                        var beginWidth = 30 + 10 * i;
+
+                        var endWidth = 35 + 10 * i;
+
+                        //头部间隔线
+                        new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(beginWidth, titleHeight, endWidth, titleHeight).Draw(mainImgImage);
+                    }
 
                     for (var i = 0; i < wordsArray.Length; i++)
                     {
@@ -65,7 +73,7 @@ namespace MagickNetService
 
                 //小程序二维码 
                 var client = new WebClient();
-                using (var watermark = new MagickImage(client.DownloadData("http://img.xiaozhang.info/wechatCode.jpg")))
+                using (var watermark = new MagickImage(client.DownloadData("http://img.blockcomet.com/wechatCode.jpg")))
                 {
                     var size = new MagickGeometry(200, 200) { IgnoreAspectRatio = true };
                     watermark.Resize(size);
