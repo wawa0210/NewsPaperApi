@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Filter
 {
@@ -45,7 +46,7 @@ namespace WebApi.Filter
         private static async Task WriteExceptionAsync(HttpContext context, Exception exception)
         {
             //记录日志
-            //ExceptionlessClient.Default.SubmitLog(typeof(Program).FullName, JsonConvert.SerializeObject(exception), "Info");
+            LoggerMessage.Define(LogLevel.Error, new EventId(1, nameof(InvalidCastException)), JsonConvert.SerializeObject(exception));
             exception.ToExceptionless().Submit();
             //返回友好的提示
             var response = context.Response;

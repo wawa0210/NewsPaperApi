@@ -42,9 +42,7 @@ namespace WebApi.Controllers
         public ResponseModel GetAccountAuth([FromBody]EntityLoginModel loginModel)
         {
             var result = AccountService.GetAccountManager(loginModel.UserName);
-
             if (result == null) return Fail(ErrorCodeEnum.UserIsNull);
-
             var checkResult = AccountService.CheckLoginInfo(loginModel.UserPwd, result.UserSalt, result.UserPwd);
             if (!checkResult) return Fail(ErrorCodeEnum.UserPwdCheckFaild);
 
