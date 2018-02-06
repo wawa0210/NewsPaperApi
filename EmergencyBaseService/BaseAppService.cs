@@ -36,7 +36,7 @@ namespace EmergencyBaseService
             if (_connection == null)
             {
                 if (string.IsNullOrEmpty(connStr))
-                    connStr = "Database=NewsPaper;Data Source=118.31.43.50;User Id=root;Password=ZX199302;CharSet=utf8;port=3306";
+                    connStr = "Database=NewsPaper;Data Source=127.0.0.1;User Id=root;Password=jessica@2018;CharSet=utf8;port=3306";
                 _connection = new MySqlConnection(connStr);
             }
             var repository = new DapperRepository<T>(_connection);

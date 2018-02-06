@@ -28,8 +28,8 @@ namespace PaperNewsService.Application
                 Title = entityNews.Title,
                 ShortContent = entityNews.ShortContent,
                 NewsContent = entityNews.Content,
-                CreateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
-                UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
+                CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 IsEnable = true,
                 HrefUrl = entityNews.HrefUrl ?? "",
                 Media = entityNews.Media ?? "",
@@ -60,7 +60,7 @@ namespace PaperNewsService.Application
             var newsRep = GetRepositoryInstance<TableNews>();
             var model = await newsRep.FindAsync(x => x.NewsId == newsId);
             model.IsEnable = false;
-            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             newsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable
@@ -202,7 +202,7 @@ namespace PaperNewsService.Application
             model.HrefUrl = entityNews.HrefUrl ?? model.HrefUrl;
             model.Media = entityNews.Media ?? model.Media;
             model.IsEnable = entityNews.IsEnable;
-            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             newsRep.Update(model);
         }
 
@@ -226,7 +226,7 @@ namespace PaperNewsService.Application
             var newsRep = GetRepositoryInstance<TableNews>();
             var model = await newsRep.FindAsync(x => x.NewsId == entityNewStatus.NewsId);
             model.IsEnable = entityNewStatus.IsEnable;
-            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            model.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             newsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable
