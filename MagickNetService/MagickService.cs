@@ -36,7 +36,7 @@ namespace MagickNetService
                             .FillColor(new MagickColor("#856D32"))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
-                            .Text(30, 80 + 90 * i, titleArray[i])
+                            .Text(50, 80 + 90 * i, titleArray[i])
                             .Draw(mainImgImage);
 
                     }
@@ -60,7 +60,7 @@ namespace MagickNetService
                             .FillColor(new MagickColor("#4D4D4D"))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
-                            .Text(30, titleHeight + 70 + 80 * i, wordsArray[i])
+                            .Text(50, titleHeight + 70 + 80 * i, wordsArray[i])
                             .Draw(mainImgImage);
                     }
                     //尾部
@@ -73,7 +73,7 @@ namespace MagickNetService
 
                 //小程序二维码 
                 var client = new WebClient();
-                using (var watermark = new MagickImage(client.DownloadData("http://img.blockcomet.com/wechatCode.jpg")))
+                using (var watermark = new MagickImage(client.DownloadData("http://img.blockcomet.com/wechatCode.png")))
                 {
                     var size = new MagickGeometry(200, 200) { IgnoreAspectRatio = true };
                     watermark.Resize(size);
