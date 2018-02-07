@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using EmergencyEntity.Configuration;
 using Exceptionless;
@@ -19,6 +20,8 @@ namespace WebApi
     {
         public Startup(IHostingEnvironment env)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             var builder = new ConfigurationBuilder()
              .SetBasePath(env.ContentRootPath)
              .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)

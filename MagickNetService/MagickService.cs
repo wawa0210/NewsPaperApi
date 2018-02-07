@@ -12,9 +12,8 @@ namespace MagickNetService
     {
         public byte[] GenerateNewImg(EntityNewsModel entityNewsModel)
         {
-            var imgUrl = "Imgs/" + GuidExtens.GuidTo16String() + ".jpg";
-            var wordsArray = SplitByLen(entityNewsModel.Content, 20);
-            var titleArray = SplitByLen(entityNewsModel.Title, 14);
+            var wordsArray = SubStrToSaLen(entityNewsModel.Content, 40);
+            var titleArray = SubStrToSaLen(entityNewsModel.Title, 28);
 
             var titleHeight = titleArray.Length * 100 + 100;
             var contentHeight = wordsArray.Length * 80 + 80;
@@ -104,7 +103,74 @@ namespace MagickNetService
                 }
             }
             return strList.ToArray();
+        }
 
+        /// <summary>  
+        /// 根据字符集,在字节级别分割为等长字符串数组  
+        /// create by lz 2017-11-24  
+        /// </summary>  
+        /// <param name="strcnt"></param>  
+        /// <param name="lenByteCount">注意这是字节长度</param>  
+        /// <returns></returns>  
+        private static string[] SubStrToSaLen(string strcnt, int lenByteCount)
+        {
+            var lstStr = new List<string>();
+            var retStr = strcnt;
+            if (retStr.Length == 0)
+            {
+                return new[] { retStr };
+            }
+            var byteArray = Encoding.GetEncoding("GB2312").GetBytes(strcnt);//.GetBytes(str);  
+            if (byteArray.Length < lenByteCount)
+                return new[] { strcnt };
+            var orgMod = (byteArray.Length / lenByteCount);
+            var lenCod = byteArray.Length % lenByteCount; //余数  
+            if (lenCod > 0)
+            {
+                var lstbyte = new List<byte>();
+
+                lstbyte.AddRange(byteArray);
+                for (var i = lstbyte.Count; i < (orgMod + 1) * lenByteCount; i++)
+                {
+                    lstbyte.Add(32);//用空格填充成整倍数  
+                }
+                byteArray = lstbyte.ToArray();
+            }
+            var lenmod = byteArray.Length / lenByteCount; //整倍数  
+            var nstart = 0;
+            for (var i = 1; i <= lenmod; i++)
+            {
+                var start = nstart;
+                var ba = new byte[lenByteCount];
+                var sublen = lenByteCount;
+                var nCount = 0;
+                var eCount = 0;
+                for (var j = 0; j < lenByteCount; j++)
+                {
+                    ba[j] = byteArray[start + j];
+                    if (ba[j] > 127)
+                        nCount++;//是汉字就统计数量  
+                    else
+                        eCount++;
+                }
+                if (nCount % 2 != 0 && eCount % 2 != 0) //如果是奇数，就有半个汉字，丢失最后一个字节，  
+                {
+                    sublen = sublen - 1;
+                }
+                nstart = start + sublen;//设置下一个字符开始位置  
+                retStr = Encoding.GetEncoding("GB2312").GetString(byteArray, start, sublen);
+                var arbyte = Encoding.GetEncoding("GB2312").GetBytes(retStr);
+                if (arbyte.Length < lenByteCount)
+                {
+                    var lsttmp = new List<byte>();
+                    lsttmp.AddRange(arbyte);
+                    lsttmp.Add(32);
+                    retStr = Encoding.GetEncoding("GB2312").GetString(lsttmp.ToArray());
+                }
+                lstStr.Add(retStr);
+            }
+
+            return lstStr.ToArray();
         }
     }
 }
