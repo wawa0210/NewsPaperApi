@@ -137,6 +137,7 @@ namespace PaperNewsService.Application
                                HrefUrl ,
                                CreateTime ,
                                UpdateTime ,
+                               Media,
                                IsEnable FROM T_News where 1=1 ");
 
             if (!entityNewQuery.IsAll)
