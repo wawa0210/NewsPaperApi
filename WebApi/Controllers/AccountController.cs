@@ -18,13 +18,15 @@ namespace WebApi.Controllers
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        public AccountController()
+        public AccountController(IAccountService iAccountService)
         {
-            IAccountService = new AccountService();
+            IAccountService = iAccountService;
         }
 
+        /// <summary>
         /// 更新密码
         /// </summary>
+        /// <param name="entityAccountPwd"></param>
         /// <returns></returns>
         [HttpPut, HttpOptions]
         [Route("pwd")]

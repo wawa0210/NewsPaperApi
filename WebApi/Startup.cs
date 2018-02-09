@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using EmergencyAccount.Application;
 using EmergencyEntity.Configuration;
 using Exceptionless;
 using Microsoft.AspNetCore.Builder;
@@ -30,9 +33,10 @@ namespace WebApi
         }
 
         public IConfigurationRoot Configuration { get; }
+        public IContainer ApplicationContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
             {
@@ -50,8 +54,16 @@ namespace WebApi
             });
             services.AddMvc();
 
+            //注入配置信息
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            this.ApplicationContainer = AutofacBuilder.Builder(services);
+
+            // Create the IServiceProvider based on the container.
+            return new AutofacServiceProvider(this.ApplicationContainer);
+
         }
+        
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

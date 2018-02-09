@@ -16,21 +16,21 @@ namespace WebApi.Controllers
     public class AuthController : BaseApiController
     {
         private IAccountService AccountService { get; set; }
-        ///// <summary>
-        ///// 初始化(autofac 已经注入)
-        ///// </summary>
-        //public AuthController(IAccountService _iAccountService)
-        //{
-        //    IAccountService = _iAccountService;
-        //}
-
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        public AuthController()
+        public AuthController(IAccountService iAccountService)
         {
-            AccountService = new AccountService();
+            AccountService = iAccountService;
         }
+
+        ///// <summary>
+        ///// 初始化(autofac 已经注入)
+        ///// </summary>
+        //public AuthController()
+        //{
+        //    AccountService = new AccountService();
+        //}
 
         /// <summary>
         /// 获得token 登录

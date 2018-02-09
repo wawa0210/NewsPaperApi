@@ -19,16 +19,16 @@ namespace WebApi.Controllers
         private INewsService NewsService { get; set; }
         private AppSettings AppSettings { get; set; }
       
-        private QiniuService qiniuService { get; set; }
+        private QiniuService QiniuService { get; set; }
 
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        public NewsController(IOptions<AppSettings> settings)
+        public NewsController(IOptions<AppSettings> settings, INewsService newsService)
         {
             AppSettings = settings.Value;
-            NewsService = new NewsService();
-            qiniuService = new QiniuService(settings);
+            NewsService = newsService;
+            QiniuService = new QiniuService(settings);
         }
         /// <summary>
         /// 获得新闻详细信息
@@ -84,7 +84,7 @@ namespace WebApi.Controllers
 
         private string UploadQiNiu(byte[] byteImgs)
         {
-            return AppSettings.QiNiuConfig.ImgUrl + qiniuService.UploadImg(byteImgs);
+            return AppSettings.QiNiuConfig.ImgUrl + QiniuService.UploadImg(byteImgs);
         }
 
         private async Task UpdateNewsImgAsync(EntityNews entityNews)
