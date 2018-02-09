@@ -3,6 +3,9 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 namespace EmergencyBaseService
 {
@@ -27,7 +30,7 @@ namespace EmergencyBaseService
         {
             //获取程序集名+类名，作为CallContext的key
             var type = typeof(T);
-            var typeName = type.Assembly.FullName + type.FullName;
+            //var typeName = type.Assembly.FullName + type.FullName;
 
             //保证在同一个HTTP请求下，对象是单例的,优先从CallContext中取
             //var repository = CallContext.GetData(typeName) as DapperRepository<T>;
@@ -36,13 +39,25 @@ namespace EmergencyBaseService
             if (_connection == null)
             {
                 if (string.IsNullOrEmpty(connStr))
-                    connStr = "Database=NewsPaper;Data Source=47.94.165.129;User Id=root;Password=jessica@2018;CharSet=utf8;port=3306";
+                    connStr = GetConnectionStr();
                 _connection = new MySqlConnection(connStr);
             }
             var repository = new DapperRepository<T>(_connection);
             //CallContext.SetData(typeName, repository);
             //}
             return repository;
+        }
+
+        /// <summary>
+        /// 获取连接字符串
+        /// </summary>
+        /// <returns></returns>
+        private string GetConnectionStr()
+        {
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var configRoot = builder.Build();
+            var conntectStr = configRoot.GetSection("db").GetSection("mysql").GetSection("connectionStr").Value;
+            return conntectStr;
         }
     }
 }
