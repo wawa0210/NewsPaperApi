@@ -12,8 +12,10 @@ namespace MagickNetService
     {
         public byte[] GenerateNewImg(EntityNewsModel entityNewsModel)
         {
-            var wordsArray = SubStrToSaLen(entityNewsModel.Content, 40);
-            var titleArray = SubStrToSaLen(entityNewsModel.Title, 28);
+            var typeSettingHelper = new TypeSettingHelper();
+
+            var wordsArray = typeSettingHelper.GetTypeSettingArray(entityNewsModel.Content, 40);
+            var titleArray = typeSettingHelper.GetTypeSettingArray(entityNewsModel.Title, 28);
 
             var titleHeight = titleArray.Length * 100 + 100;
             var contentHeight = wordsArray.Length * 80 + 80;
@@ -123,6 +125,8 @@ namespace MagickNetService
             var byteArray = Encoding.GetEncoding("GB2312").GetBytes(strcnt);//.GetBytes(str);  
             if (byteArray.Length < lenByteCount)
                 return new[] { strcnt };
+
+
             var orgMod = (byteArray.Length / lenByteCount);
             var lenCod = byteArray.Length % lenByteCount; //余数  
             if (lenCod > 0)
