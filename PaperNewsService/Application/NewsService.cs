@@ -33,7 +33,8 @@ namespace PaperNewsService.Application
                 IsEnable = true,
                 HrefUrl = entityNews.HrefUrl ?? "",
                 Media = entityNews.Media ?? "",
-                NewsImgUrl = ""
+                NewsImgUrl = "",
+                NewsType = entityNews.NewsType
             };
             await newsRep.InsertAsync(model);
             entityNews.NewsId = model.NewsId;
@@ -138,6 +139,7 @@ namespace PaperNewsService.Application
                                CreateTime ,
                                UpdateTime ,
                                Media,
+                               NewsType,
                                IsEnable FROM T_News where 1=1 ");
 
             if (!entityNewQuery.IsAll)

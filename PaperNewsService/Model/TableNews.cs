@@ -120,5 +120,15 @@ namespace PaperNewsService.Model
         {
             get; set;
         }
+
+        /// <summary>
+        /// 新闻类别
+        /// </summary>
+        [Column("NewsType")]
+        [Description("新闻类别")]
+        public int  NewsType
+        {
+            get; set;
+        }
     }
 }

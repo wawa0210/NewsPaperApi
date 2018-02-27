@@ -58,5 +58,10 @@ namespace PaperNewsService.Entity
         {
             get; set;
         }
+
+        public int NewsType
+        {
+            get;set;
+        }
     }
 }
