@@ -36,5 +36,7 @@ namespace PaperNewsService.Application
         /// <param name="entityNews"></param>
         /// <returns></returns>
         Task<EntityVersion> GetVersionAsync(string versionId);
+
+        Task<bool?> GetVersionStatus(string versionId);
     }
 }

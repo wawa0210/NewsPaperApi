@@ -140,7 +140,7 @@ namespace WebApi.Controllers
         [Route("")]
         public async Task<ResponseModel> GetPageNewsAsync([FromQuery] EntityNewQuery entityNewQuery)
         {
-            return Success(await NewsService.GetPageCompanyAsync(entityNewQuery));
+            return Success(await NewsService.GetPageNewsInfoAsync(entityNewQuery));
         }
     }
 }

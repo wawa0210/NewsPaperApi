@@ -15,7 +15,7 @@ namespace PaperNewsService.Application
         /// </summary>
         /// <param name="entityNewQuery"></param>
         /// <returns></returns>
-        Task<PageBase<EntityListNews>> GetPageCompanyAsync(EntityNewQuery entityNewQuery);
+        Task<PageBase<EntityListNews>> GetPageNewsInfoAsync(EntityNewQuery entityNewQuery);
 
         /// <summary>
         /// 新增新闻信息

@@ -122,7 +122,7 @@ namespace PaperNewsService.Model
         }
 
         /// <summary>
-        /// 新闻类别
+        /// 新闻类别 新闻类别(1:新闻类 2：审核专用)
         /// </summary>
         [Column("NewsType")]
         [Description("新闻类别")]

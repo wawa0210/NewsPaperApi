@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +10,7 @@ using EmergencyBaseService;
 using EmergencyData.MicroOrm.SqlGenerator;
 using EmergencyEntity.PageQuery;
 using PaperNewsService.Entity;
+using PaperNewsService.Enum;
 using PaperNewsService.Model;
 
 namespace PaperNewsService.Application
@@ -102,6 +104,21 @@ namespace PaperNewsService.Application
             model.VersionStatus = (int)entityVersion.VersionStatus;
             model.Remark = entityVersion.Remark ?? model.Remark;
             versionRep.Update(model);
+        }
+
+        /// <summary>
+        /// 根据新闻编号获得新闻最新状态
+        /// </summary>
+        /// <param name="versionId"></param>
+        /// <returns></returns>
+        public async Task<bool?> GetVersionStatus(string versionId)
+        {
+            if (string.IsNullOrEmpty(versionId)) return null;
+            var versionRep = GetRepositoryInstance<TableVersions>();
+            var model = await versionRep.FindAllAsync(x => x.VersionId == versionId);
+            if (!model.Any()) return null;
+
+            return model.ToList().OrderByDescending(x => x.CreateTime).First().VersionStatus == (int)EnumVersionStatus.Published;
         }
     }
 }

@@ -34,5 +34,13 @@ namespace PaperNewsService.Entity
         {
             get; set;
         }
+
+        /// <summary>
+        /// 小程序版本号
+        /// </summary>
+        public string versionId
+        {
+            get; set;
+        }
     }
 }

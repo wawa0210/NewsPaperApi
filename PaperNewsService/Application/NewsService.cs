@@ -18,6 +18,13 @@ namespace PaperNewsService.Application
 {
     public class NewsService : BaseAppService, INewsService
     {
+        private IVersionService VersionService { get; set; }
+
+        public NewsService(IVersionService versionService)
+        {
+            VersionService = versionService;
+        }
+
         public async Task<EntityNews> AddNewsAsync(EntityNews entityNews)
         {
             var newsRep = GetRepositoryInstance<TableNews>();
@@ -102,8 +109,10 @@ namespace PaperNewsService.Application
             });
         }
 
-        public async Task<PageBase<EntityListNews>> GetPageCompanyAsync(EntityNewQuery entityNewQuery)
+        public async Task<PageBase<EntityListNews>> GetPageNewsInfoAsync(EntityNewQuery entityNewQuery)
         {
+            var versionStatus = await VersionService.GetVersionStatus(entityNewQuery.versionId);
+
             var result = new PageBase<EntityListNews>
             {
                 CurrentPage = entityNewQuery.CurrentPage,
@@ -126,6 +135,12 @@ namespace PaperNewsService.Application
             if (!string.IsNullOrEmpty(entityNewQuery.Title))
             {
                 strTotalSql.Append(" and  Title like @title ");
+            }
+
+            if (versionStatus != null)
+            {
+                strTotalSql.Append(" and  NewsType = @versionStatus ");
+
             }
 
             //分页信息
@@ -151,6 +166,13 @@ namespace PaperNewsService.Application
             {
                 strSql.Append(" and  Title like @title ");
             }
+
+            if (versionStatus != null)
+            {
+                strSql.Append(" and  NewsType = @versionStatus ");
+
+            }
+
             strSql.Append(@"
                             order by createTime desc
                         ");
@@ -158,6 +180,7 @@ namespace PaperNewsService.Application
 
             var paras = new DynamicParameters(new
             {
+                versionStatus = versionStatus != null ? ((bool)versionStatus ? 1 : 2) : 2,
                 isEnable = entityNewQuery.IsEnable,
                 title = "%" + entityNewQuery.Title + "%",
                 startIndex = (entityNewQuery.CurrentPage - 1) * entityNewQuery.PageSize,
