@@ -40,6 +40,14 @@ namespace WebApi.FrameWork
                  .ForMember(x => x.Media, y => y.MapFrom(z => z.Media))
                  .ForMember(x => x.NewsType, y => y.MapFrom(z => z.NewsType))
                  .ForAllOtherMembers(x => x.Ignore());
+
+                cfg.CreateMap<TableVersions, EntityVersion>()
+                  .ForMember(x => x.VersionId, y => y.MapFrom(z => z.VersionId))
+                  .ForMember(x => x.VersionName, y => y.MapFrom(z => z.VersionName))
+                  .ForMember(x => x.VersionStatus, y => y.MapFrom(z => z.VersionStatus))
+                  .ForMember(x => x.Remark, y => y.MapFrom(z => z.Remark))
+                  .ForMember(x => x.CreateTime, y => y.MapFrom(z => z.CreateTime))
+                  .ForAllOtherMembers(x => x.Ignore());
             }
             );
         }

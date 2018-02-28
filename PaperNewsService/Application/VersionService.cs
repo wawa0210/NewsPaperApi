@@ -100,6 +100,7 @@ namespace PaperNewsService.Application
             var model = await versionRep.FindAsync(x => x.VersionId == entityVersion.VersionId);
             if (model == null) return;
             model.VersionStatus = (int)entityVersion.VersionStatus;
+            model.Remark = entityVersion.Remark ?? model.Remark;
             versionRep.Update(model);
         }
     }

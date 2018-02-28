@@ -52,5 +52,7 @@ namespace PaperNewsService.Entity
         {
             get; set;
         }
+
+        public string CreateTime { get; set; }
     }
 }
