@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PaperNewsService.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -7,12 +8,16 @@ namespace PaperNewsService.Entity
 {
     public class EntityVersion
     {
+        public EntityVersion()
+        {
+            VersionStatus = EnumVersionStatus.Examining;
+        }
         /// <summary>
         /// 属性: 
         /// </summary>
         public long Id
         {
-            get;
+            get; set;
         }
         /// <summary>
         /// 版本编号
@@ -24,7 +29,7 @@ namespace PaperNewsService.Entity
         /// <summary>
         /// 版本编号
         /// </summary>
-        [Required(ErrorMessage ="版本名称不能为空")]
+        [Required(ErrorMessage = "版本名称不能为空")]
         public string VersionName
         {
             get; set;
@@ -35,7 +40,7 @@ namespace PaperNewsService.Entity
         /// </summary>
         [Required(ErrorMessage = "版本状态不能为空")]
 
-        public string VersionStatus
+        public EnumVersionStatus VersionStatus
         {
             get; set;
         }

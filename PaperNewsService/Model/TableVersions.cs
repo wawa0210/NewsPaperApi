@@ -47,7 +47,7 @@ namespace PaperNewsService.Model
         /// </summary>
         [Column("VersionStatus")]
         [Description("版本状态")]
-        public string VersionStatus
+        public int VersionStatus
         {
             get; set;
         }
