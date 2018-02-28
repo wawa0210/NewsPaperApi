@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PaperNewsService.Application;
 using PaperNewsService.Entity;
+using PaperNewsService.Enum;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -39,6 +40,8 @@ namespace WebApi.Controllers
         [Route("")]
         public async Task<ResponseModel> UpdateVersionsAsync([FromBody]EntityVersion entityVersion)
         {
+            if (string.IsNullOrEmpty(entityVersion.VersionId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
+            if (!Enum.IsDefined(typeof(EnumVersionStatus), entityVersion.VersionStatus)) return Fail(ErrorCodeEnum.ParamsInvalid);
             await VersionService.UpdateVersionAsync(entityVersion);
             return Success("编辑成功");
         }
@@ -49,7 +52,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{versionId}")]
-        public async Task<ResponseModel> GetVersionsAsync([FromQuery]string versionId)
+        public async Task<ResponseModel> GetVersionsAsync(string versionId)
         {
             if (string.IsNullOrEmpty(versionId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
             return Success(await VersionService.GetVersionAsync(versionId));

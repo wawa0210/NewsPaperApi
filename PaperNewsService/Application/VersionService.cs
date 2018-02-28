@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using CommonLib;
 using Dapper;
 using EmergencyBaseService;
 using EmergencyData.MicroOrm.SqlGenerator;
@@ -19,7 +20,7 @@ namespace PaperNewsService.Application
             var versionRep = GetRepositoryInstance<TableVersions>();
             var model = new TableVersions
             {
-                VersionId = DateTime.Now.Millisecond.ToString(),
+                VersionId = Utils.GetCheckCode(6),
                 VersionName = entityVersion.VersionName,
                 VersionStatus = (int)entityVersion.VersionStatus,
                 CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
@@ -48,13 +49,13 @@ namespace PaperNewsService.Application
 
             if (!string.IsNullOrEmpty(entityVersionQuery.VersionName))
             {
-                strTotalSql.Append(" and  VerionName like @title ");
+                strTotalSql.Append(" and  VersionName like @versionName ");
             }
             //分页信息
             strSql.Append(@";  SELECT 
                                Id ,
                                VersionId ,
-                               VerionName ,
+                               VersionName ,
                                VersionStatus ,
                                CreateTime ,
                                Remark 
@@ -62,7 +63,7 @@ namespace PaperNewsService.Application
 
             if (!string.IsNullOrEmpty(entityVersionQuery.VersionName))
             {
-                strSql.Append(" and  VerionName like @title ");
+                strSql.Append(" and  VersionName like @versionName ");
             }
             strSql.Append(@"
                             order by createTime desc
@@ -72,7 +73,7 @@ namespace PaperNewsService.Application
 
             var paras = new DynamicParameters(new
             {
-                title = "%" + entityVersionQuery.VersionName + "%",
+                versionName = "%" + entityVersionQuery.VersionName + "%",
                 startIndex = (entityVersionQuery.CurrentPage - 1) * entityVersionQuery.PageSize,
                 endIndex = entityVersionQuery.CurrentPage * entityVersionQuery.PageSize
             });
