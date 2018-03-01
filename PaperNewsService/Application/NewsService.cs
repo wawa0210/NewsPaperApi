@@ -29,6 +29,9 @@ namespace PaperNewsService.Application
         {
             var newsRep = GetRepositoryInstance<TableNews>();
 
+            //新闻已存在，直接返回
+            if (newsRep.Find(x => x.Title == entityNews.Title) != null) return entityNews;
+
             var model = new TableNews
             {
                 NewsId = GuidExtens.GuidTo16String(),
