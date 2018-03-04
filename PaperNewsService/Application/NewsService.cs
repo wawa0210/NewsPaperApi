@@ -143,7 +143,10 @@ namespace PaperNewsService.Application
             if (versionStatus != null)
             {
                 strTotalSql.Append(" and  NewsType = @versionStatus ");
-
+            }
+            else
+            {
+                strSql.Append(" and  NewsType = 1 ");
             }
 
             //分页信息
@@ -173,7 +176,10 @@ namespace PaperNewsService.Application
             if (versionStatus != null)
             {
                 strSql.Append(" and  NewsType = @versionStatus ");
-
+            }
+            else
+            {
+                strSql.Append(" and  NewsType = 1 ");
             }
 
             strSql.Append(@"
