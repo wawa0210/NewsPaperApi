@@ -139,15 +139,7 @@ namespace PaperNewsService.Application
             {
                 strTotalSql.Append(" and  Title like @title ");
             }
-
-            if (versionStatus != null)
-            {
-                strTotalSql.Append(" and  NewsType = @versionStatus ");
-            }
-            else
-            {
-                strSql.Append(" and  NewsType = 1 ");
-            }
+            strTotalSql.Append(" and  NewsType = @versionStatus ");
 
             //分页信息
             strSql.Append(@";  SELECT 
@@ -173,14 +165,7 @@ namespace PaperNewsService.Application
                 strSql.Append(" and  Title like @title ");
             }
 
-            if (versionStatus != null)
-            {
-                strSql.Append(" and  NewsType = @versionStatus ");
-            }
-            else
-            {
-                strSql.Append(" and  NewsType = 1 ");
-            }
+            strSql.Append(" and  NewsType = @versionStatus ");
 
             strSql.Append(@"
                             order by createTime desc
@@ -189,7 +174,7 @@ namespace PaperNewsService.Application
 
             var paras = new DynamicParameters(new
             {
-                versionStatus = versionStatus != null ? ((bool)versionStatus ? 1 : 2) : 2,
+                versionStatus = versionStatus != null ? ((bool)versionStatus ? 1 : 2) : 1,
                 isEnable = entityNewQuery.IsEnable,
                 title = "%" + entityNewQuery.Title + "%",
                 startIndex = (entityNewQuery.CurrentPage - 1) * entityNewQuery.PageSize,
