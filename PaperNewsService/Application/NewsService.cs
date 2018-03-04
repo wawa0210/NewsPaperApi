@@ -133,13 +133,13 @@ namespace PaperNewsService.Application
             if (!entityNewQuery.IsAll)
             {
                 strTotalSql.Append(" and isEnable = @isEnable ");
-            }
+                strTotalSql.Append(" and  NewsType = @versionStatus ");
 
+            }
             if (!string.IsNullOrEmpty(entityNewQuery.Title))
             {
                 strTotalSql.Append(" and  Title like @title ");
             }
-            strTotalSql.Append(" and  NewsType = @versionStatus ");
 
             //分页信息
             strSql.Append(@";  SELECT 
@@ -158,6 +158,7 @@ namespace PaperNewsService.Application
             if (!entityNewQuery.IsAll)
             {
                 strSql.Append(" and isEnable=@isEnable ");
+                strSql.Append(" and  NewsType = @versionStatus ");
             }
 
             if (!string.IsNullOrEmpty(entityNewQuery.Title))
@@ -165,7 +166,6 @@ namespace PaperNewsService.Application
                 strSql.Append(" and  Title like @title ");
             }
 
-            strSql.Append(" and  NewsType = @versionStatus ");
 
             strSql.Append(@"
                             order by createTime desc
