@@ -6,18 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Log\" />
     <Folder Include="wwwroot\" />
     <Folder Include="Imgs\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.2" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
-    <PackageReference Include="Exceptionless.AspNetCore" Version="4.2.1982" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.1" />
+    <PackageReference Include="Exceptionless.AspNetCore" Version="4.2.1989" />
+    <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="7.3.0" />
     <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +35,12 @@
     <Reference Include="Qiniu">
       <HintPath>..\lib\Qiniu.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

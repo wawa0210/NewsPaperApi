@@ -9,6 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using CommonLib;
+using log4net;
 using Microsoft.Extensions.Logging;
 
 namespace WebApi.Filter
@@ -36,7 +38,6 @@ namespace WebApi.Filter
                 await HandleExceptionAsync(context, ex);
             }
         }
-
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             if (exception == null) return;
@@ -45,17 +46,25 @@ namespace WebApi.Filter
 
         private static async Task WriteExceptionAsync(HttpContext context, Exception exception)
         {
+            LogHelper.LogError("", exception);
+            LogHelper.LogInfo("asdasdhakslj");
+
+
             //记录日志
-            LoggerMessage.Define(LogLevel.Error, new EventId(1, nameof(InvalidCastException)), JsonConvert.SerializeObject(exception));
             exception.ToExceptionless().Submit();
             //返回友好的提示
             var response = context.Response;
 
             //状态码
-            if (exception is UnauthorizedAccessException)
-                response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            else if (exception is Exception)
-                response.StatusCode = (int)HttpStatusCode.BadRequest;
+            switch (exception)
+            {
+                case UnauthorizedAccessException _:
+                    response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    break;
+                case Exception _:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
+            }
 
             response.ContentType = context.Request.Headers["Accept"];
 

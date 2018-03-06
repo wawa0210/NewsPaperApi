@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CommonLib;
 using EmergencyAccount.Application;
 using EmergencyEntity.Configuration;
 using Exceptionless;
+using log4net;
+using log4net.Config;
+using log4net.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +26,7 @@ namespace WebApi
 {
     public class Startup
     {
+
         public Startup(IHostingEnvironment env)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -28,6 +34,7 @@ namespace WebApi
             var builder = new ConfigurationBuilder()
              .SetBasePath(env.ContentRootPath)
              .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+             .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
              .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -63,10 +70,10 @@ namespace WebApi
             return new AutofacServiceProvider(this.ApplicationContainer);
 
         }
-        
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
