@@ -58,11 +58,11 @@ namespace PaperNewsService.Application
         /// <returns></returns>
         public async Task<bool> DeleteNewsAsync(string newsId)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
-            var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == newsId);
             if (model == null) return false;
             if (model.IsEnable) return false;
-            NewsRep.Delete(model);
+            newsRep.Delete(model);
             return true;
         }
 
