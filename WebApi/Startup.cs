@@ -13,12 +13,14 @@ using Exceptionless;
 using log4net;
 using log4net.Config;
 using log4net.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using WebApi.Filter;
 using WebApi.FrameWork;
 
@@ -57,6 +59,7 @@ namespace WebApi
             });
             services.AddMvc(options =>
             {
+                options.Filters.Add(typeof(AuthenticationFilter));
                 options.Filters.Add(typeof(ValidationActionFilter));
             });
             services.AddMvc();
@@ -64,10 +67,26 @@ namespace WebApi
             //注入配置信息
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            this.ApplicationContainer = AutofacBuilder.Builder(services);
+            ApplicationContainer = AutofacBuilder.Builder(services);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = Configuration.GetSection("jwt").GetSection("issure").Value,
+                            ValidAudience = Configuration.GetSection("jwt").GetSection("audience").Value,
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(Configuration.GetSection("jwt").GetSection("securitykey").Value))
+                        };
+                    });
 
             // Create the IServiceProvider based on the container.
-            return new AutofacServiceProvider(this.ApplicationContainer);
+            return new AutofacServiceProvider(ApplicationContainer);
 
         }
 
@@ -83,7 +102,9 @@ namespace WebApi
             MapperInit.InitMapping();
             app.UseExceptionless("riuCGjWnRDEXcvLASaeRHVdYE9OxHyFtb9SBXPvU");
             app.UseMiddleware<ExceptionHandlerMiddleWare>();
+            app.UseAuthentication();
             app.UseMvc();
+            app.UseStaticFiles();
         }
     }
 }

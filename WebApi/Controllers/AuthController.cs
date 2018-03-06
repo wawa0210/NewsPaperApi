@@ -51,7 +51,7 @@ namespace WebApi.Controllers
 
             return Success(new
             {
-                token = AesHelper.Encrypt(JsonConvert.SerializeObject(result)),
+                token = new JwtManager().GenerateJwtToken(result),
                 userInfo = result
             });
         }
