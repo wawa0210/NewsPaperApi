@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using WebApi.FrameWork;
 using WebApi.Models;
 using WebApi.Qiniu;
 
@@ -45,6 +46,8 @@ namespace WebApi.Controllers
             if (result == null) return Fail(ErrorCodeEnum.UserIsNull);
             var checkResult = AccountService.CheckLoginInfo(loginModel.UserPwd, result.UserSalt, result.UserPwd);
             if (!checkResult) return Fail(ErrorCodeEnum.UserPwdCheckFaild);
+
+            //var token = new JwtManager().GenerateJwtToken(result);
 
             return Success(new
             {
