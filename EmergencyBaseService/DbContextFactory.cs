@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
+using EmergencyData.MicroOrm.SqlGenerator;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
@@ -11,15 +12,15 @@ namespace EmergencyBaseService
 {
     public class DbContextFactory
     {
-        public static IDbConnection CreateDbConnection(EnumDataBase enumDataBase, string connectionStr = "")
+        public static IDbConnection CreateDbConnection(ESqlConnector enumDataBase, string connectionStr = "")
         {
             if (string.IsNullOrWhiteSpace(connectionStr))
                 connectionStr = GetConnectionStr(enumDataBase);
             switch (enumDataBase)
             {
-                case EnumDataBase.MySql:
+                case ESqlConnector.MySql:
                     return new MySqlConnection(connectionStr);
-                case EnumDataBase.SqlServer:
+                case ESqlConnector.Mssql:
                     return new SqlConnection(connectionStr);
                 default:
                     throw new Exception("没用找的IDbConnection的实例类型");
@@ -30,17 +31,17 @@ namespace EmergencyBaseService
         /// 获取连接字符串
         /// </summary>
         /// <returns></returns>
-        private static string GetConnectionStr(EnumDataBase enumDataBase)
+        private static string GetConnectionStr(ESqlConnector enumDataBase)
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var configRoot = builder.Build();
             var conntectStr = "";
             switch (enumDataBase)
             {
-                case EnumDataBase.MySql:
+                case ESqlConnector.MySql:
                     conntectStr = configRoot.GetSection("db").GetSection("mysql").GetSection("connectionStr").Value;
                     break;
-                case EnumDataBase.SqlServer:
+                case ESqlConnector.Mssql:
                     conntectStr = configRoot.GetSection("db").GetSection("sqlserver").GetSection("connectionStr").Value;
                     break;
                 default:

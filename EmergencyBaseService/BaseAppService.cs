@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using EmergencyData.MicroOrm.SqlGenerator;
 
 namespace EmergencyBaseService
 {
@@ -30,9 +31,9 @@ namespace EmergencyBaseService
         {
             if (_connection == null)
             {
-                _connection = DbContextFactory.CreateDbConnection(EnumDataBase.MySql, connStr);
+                _connection = DbContextFactory.CreateDbConnection(ESqlConnector.MySql, connStr);
             }
-            var repository = new DapperRepository<T>(_connection);
+            var repository = new DapperRepository<T>(_connection, ESqlConnector.MySql);
             return repository;
         }
 
