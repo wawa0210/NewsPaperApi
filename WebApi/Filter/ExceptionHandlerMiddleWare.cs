@@ -10,6 +10,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CommonLib;
+using CommonLib.Logger;
 using log4net;
 using Microsoft.Extensions.Logging;
 

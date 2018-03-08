@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
+using CommonLib.Configuration;
 using EmergencyData.MicroOrm.SqlGenerator;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
@@ -33,16 +34,16 @@ namespace EmergencyBaseService
         /// <returns></returns>
         private static string GetConnectionStr(ESqlConnector enumDataBase)
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-            var configRoot = builder.Build();
             var conntectStr = "";
             switch (enumDataBase)
             {
                 case ESqlConnector.MySql:
-                    conntectStr = configRoot.GetSection("db").GetSection("mysql").GetSection("connectionStr").Value;
+                    conntectStr = ConfigurationHelper.GetInstance().GetSection("db").GetSection("mysql").GetSection("connectionStr").Value;
                     break;
                 case ESqlConnector.Mssql:
-                    conntectStr = configRoot.GetSection("db").GetSection("sqlserver").GetSection("connectionStr").Value;
+                    conntectStr = ConfigurationHelper.GetInstance().GetSection("db").GetSection("sqlserver").GetSection("connectionStr").Value;
+                    break;
+                case ESqlConnector.PostgreSql:
                     break;
                 default:
                     throw new Exception("没用找的IDbConnection的实例类型");

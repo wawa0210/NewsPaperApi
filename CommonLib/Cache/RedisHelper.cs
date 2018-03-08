@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommonLib.Configuration;
 using CommonLib.Extensions;
+using CommonLib.Logger;
 using log4net;
 using Microsoft.IdentityModel.Protocols;
 using StackExchange.Redis;
@@ -12,10 +14,8 @@ namespace CommonLib.Cache
 {
     public class RedisHelper
     {
-        //private static readonly string RedisHost = ConfigurationManager<>.AppSettings["RedisHost"];
-        //private static readonly string RedisPwd = ConfigurationManager.AppSettings["RedisPwd"];
-        private static readonly string RedisHost = "";
-        private static readonly string RedisPwd = "";
+        private static readonly string RedisHost = ConfigurationHelper.GetInstance().GetSection("Redis").GetSection("redishost").Value;
+        private static readonly string RedisPwd = ConfigurationHelper.GetInstance().GetSection("Redis").GetSection("redispwd").Value;
 
         private static readonly int RedisDbIndex = 0;
         private static readonly object LockObject = new object();
@@ -76,7 +76,7 @@ namespace CommonLib.Cache
         /// <param name="e"></param>
         private static void MuxerConnectionFailed(object sender, ConnectionFailedEventArgs e)
         {
-            //LogManager.WriteLog(LogType.Error, "重新连接：Endpoint failed: " + e.EndPoint + ", " + e.FailureType + (e.Exception == null ? "" : (", " + e.Exception.Message)));
+            LogHelper.LogError("重新连接：Endpoint failed:",e.Exception);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace CommonLib.Cache
         /// <param name="e"></param>
         private static void MuxerInternalError(object sender, InternalErrorEventArgs e)
         {
-            //LogManager.WriteLog(LogType.Error, "InternalError:Message" + e.Exception.Message);
+            LogHelper.LogError("redis,InternalError:", e.Exception);
         }
 
         /// <summary>

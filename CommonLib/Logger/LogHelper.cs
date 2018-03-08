@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using log4net;
 using log4net.Config;
-using log4net.Core;
 using log4net.Repository;
 
-namespace CommonLib
+namespace CommonLib.Logger
 {
     public static class LogHelper
     {
