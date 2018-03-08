@@ -16,6 +16,9 @@ namespace WebApi.Models
         [Description("无接口操作权限")]
         Forbidden = 403,
 
+        [Description("授权验证不通过")]
+        Unauthorized = 401,
+
         [Description("未找到对应的资源")]
         NotFound = 404,
 

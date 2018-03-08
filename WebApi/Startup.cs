@@ -2,6 +2,7 @@
 using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CommonLib.Extensions;
 using EmergencyEntity.Configuration;
 using Exceptionless;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -60,7 +61,7 @@ namespace WebApi
             //注入配置信息
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-
+            //添加jwt认证
             services.AddAuthentication(options =>
                     {
                         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -74,6 +75,7 @@ namespace WebApi
                             ValidateAudience = true,
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
+                            ClockSkew = TimeSpan.FromSeconds(StaticConfiguration["jwt:expireseconds"].ToInt32(1800)),
                             ValidIssuer = StaticConfiguration["jwt:issure"],
                             ValidAudience = StaticConfiguration["jwt:audience"],
                             IssuerSigningKey = new SymmetricSecurityKey(
@@ -92,7 +94,6 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseMiddleware<ExceptionHandlerMiddleWare>();
 
             if (env.IsDevelopment())
             {
@@ -101,9 +102,17 @@ namespace WebApi
             app.UseCors("any");
             MapperInit.InitMapping();
             app.UseExceptionless("riuCGjWnRDEXcvLASaeRHVdYE9OxHyFtb9SBXPvU");
+            app.UseMiddleware<ExceptionHandlerMiddleWare>();
+            //app.UseExceptionHandler(appBuilder =>
+            //{
+            //    appBuilder.Use(async (context, next) =>
+            //    {
+            //        await new ExceptionMiddleware().HandleExceptionAsync(context, next);
+            //    });
+            //}
+            //);
             app.UseAuthentication();
             app.UseMvc();
-            app.UseStaticFiles();
         }
     }
 }

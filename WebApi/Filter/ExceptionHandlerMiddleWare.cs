@@ -58,7 +58,8 @@ namespace WebApi.Filter
 
                 var responseObj = new ResponseModel
                 {
-                    Message = apiException.Message
+                    Message = apiException.Message,
+                    Code = (int)ErrorCodeEnum.Unauthorized
                 };
 
                 objMsg = JsonConvert.SerializeObject(responseObj);
@@ -85,6 +86,7 @@ namespace WebApi.Filter
             }
             else
             {
+                response.ContentType = "application/json";
                 await response.WriteAsync(objMsg);
             }
 

@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using EmergencyEntity.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +18,7 @@ namespace WebApi.Controllers
     {
         private INewsService NewsService { get; set; }
         private AppSettings AppSettings { get; set; }
-      
+
         private QiniuService QiniuService { get; set; }
 
         /// <summary>
@@ -35,10 +38,13 @@ namespace WebApi.Controllers
         [Route("{newsId}")]
         public async Task<ResponseModel> GetNewsbyIdAsync(string newsId)
         {
+            var currentUser = HttpContext.User;
+            var userContext = currentUser.Claims.FirstOrDefault().Value;
+
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
             return Success(await NewsService.GetNewsIntfByIdAsync(newsId));
         }
-        
+
         /// <summary>
         /// 删除新闻
         /// </summary>
@@ -86,7 +92,7 @@ namespace WebApi.Controllers
 
         private async Task UpdateNewsImgAsync(EntityNews entityNews)
         {
-            var imgUrl = UploadQiNiu(NewsService.GetNewsShareImgAsync(entityNews.Title,entityNews.ShortContent));
+            var imgUrl = UploadQiNiu(NewsService.GetNewsShareImgAsync(entityNews.Title, entityNews.ShortContent));
             await NewsService.UpateNewsImgAsync(entityNews.NewsId, imgUrl);
 
         }

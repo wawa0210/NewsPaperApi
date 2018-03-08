@@ -17,7 +17,7 @@ namespace WebApi.Filter
             //var token = tokenKey.Key == null ? string.Empty : tokenKey.Value.FirstOrDefault();
 
             //if (string.IsNullOrWhiteSpace(token))
-            //    throw new ApiException(ApiStatusEnum.NotAuthenticated);
+           throw new ApiException(ApiStatusEnum.NotAuthenticated);
 
             //return;
             await base.OnActionExecutionAsync(context, next);
