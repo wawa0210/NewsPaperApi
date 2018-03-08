@@ -1,4 +1,5 @@
 ﻿using CommonLib;
+using CommonLib.Extensions;
 using EmergencyAccount.Entity;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using CommonLib.Configuration;
 
 namespace WebApi.FrameWork
 {

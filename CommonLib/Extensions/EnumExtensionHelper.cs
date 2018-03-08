@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace CommonLib
+namespace CommonLib.Extensions
 {
     /// <summary>
     /// 枚举扩展帮助类

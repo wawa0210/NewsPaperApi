@@ -38,7 +38,7 @@ namespace PaperNewsService.Entity
         /// <summary>
         /// 小程序版本号
         /// </summary>
-        public string versionId
+        public string VersionId
         {
             get; set;
         }

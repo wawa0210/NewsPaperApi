@@ -113,7 +113,7 @@ namespace CommonLib
         /// </summary>
         /// <param name="strUrl">要验证的Url</param>
         /// <returns>判断结果</returns>
-        public static bool IsURL(string strUrl)
+        public static bool IsUrl(string strUrl)
         {
             return Regex.IsMatch(strUrl, @"^(http|https)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{1,10}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&%\$#\=~_\-]+))*$");
         }
@@ -244,8 +244,8 @@ namespace CommonLib
             decimal intValue = defValue;
             if (expression != null)
             {
-                bool IsDecimal = Regex.IsMatch(expression, @"^([-]|[0-9])[0-9]*(\.\w*)?$");
-                if (IsDecimal)
+                bool isDecimal = Regex.IsMatch(expression, @"^([-]|[0-9])[0-9]*(\.\w*)?$");
+                if (isDecimal)
                     decimal.TryParse(expression, out intValue);
             }
             return intValue;
@@ -279,8 +279,8 @@ namespace CommonLib
             float intValue = defValue;
             if (expression != null)
             {
-                bool IsFloat = Regex.IsMatch(expression, @"^([-]|[0-9])[0-9]*(\.\w*)?$");
-                if (IsFloat)
+                bool isFloat = Regex.IsMatch(expression, @"^([-]|[0-9])[0-9]*(\.\w*)?$");
+                if (isFloat)
                     float.TryParse(expression, out intValue);
             }
             return intValue;
@@ -424,13 +424,13 @@ namespace CommonLib
         /// <returns></returns>
         public static string StringOfChar(int strLong, string str)
         {
-            string ReturnStr = "";
+            string returnStr = "";
             for (int i = 0; i < strLong; i++)
             {
-                ReturnStr += str;
+                returnStr += str;
             }
 
-            return ReturnStr;
+            return returnStr;
         }
         #endregion
 
@@ -461,16 +461,16 @@ namespace CommonLib
         /// <summary>
         /// 生成随机数字
         /// </summary>
-        /// <param name="Length">生成长度</param>
-        /// <param name="Sleep">是否要在生成前将当前线程阻止以避免重复</param>
+        /// <param name="length">生成长度</param>
+        /// <param name="sleep">是否要在生成前将当前线程阻止以避免重复</param>
         /// <returns></returns>
-        public static string Number(int Length, bool Sleep)
+        public static string Number(int length, bool sleep)
         {
-            if (Sleep)
+            if (sleep)
                 System.Threading.Thread.Sleep(3);
             string result = "";
             System.Random random = new Random();
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < length; i++)
             {
                 result += random.Next(10).ToString();
             }
@@ -515,8 +515,8 @@ namespace CommonLib
         private static int Next(int numSeeds, int length)
         {
             byte[] buffer = new byte[length];
-            System.Security.Cryptography.RNGCryptoServiceProvider Gen = new System.Security.Cryptography.RNGCryptoServiceProvider();
-            Gen.GetBytes(buffer);
+            System.Security.Cryptography.RNGCryptoServiceProvider gen = new System.Security.Cryptography.RNGCryptoServiceProvider();
+            gen.GetBytes(buffer);
             uint randomResult = 0x0;//这里用uint作为生成的随机数  
             for (int i = 0; i < length; i++)
             {
@@ -530,12 +530,12 @@ namespace CommonLib
         /// <summary>
         /// 字符串字符处理
         /// </summary>
-        /// <param name="Input">等待处理的字符串</param>
+        /// <param name="input">等待处理的字符串</param>
         /// <returns>处理后的字符串</returns>
         /// //把TXT代码转换成HTML格式
-        public static String ToHtml(string Input)
+        public static String ToHtml(string input)
         {
-            StringBuilder sb = new StringBuilder(Input);
+            StringBuilder sb = new StringBuilder(input);
             sb.Replace("&", "&amp;");
             sb.Replace("<", "&lt;");
             sb.Replace(">", "&gt;");
@@ -551,12 +551,12 @@ namespace CommonLib
         /// <summary>
         /// 字符串字符处理
         /// </summary>
-        /// <param name="Input">等待处理的字符串</param>
+        /// <param name="input">等待处理的字符串</param>
         /// <returns>处理后的字符串</returns>
         /// //把HTML代码转换成TXT格式
-        public static String ToTxt(String Input)
+        public static String ToTxt(String input)
         {
-            StringBuilder sb = new StringBuilder(Input);
+            StringBuilder sb = new StringBuilder(input);
             sb.Replace("&nbsp;", " ");
             sb.Replace("<br>", "\r\n");
             sb.Replace("<br>", "\n");
@@ -606,15 +606,15 @@ namespace CommonLib
         /// <summary> 
         /// 检查过滤设定的危险字符
         /// </summary> 
-        /// <param name="InText">要过滤的字符串 </param> 
+        /// <param name="inText">要过滤的字符串 </param> 
         /// <returns>如果参数存在不安全字符，则返回true </returns> 
-        public static bool SqlFilter(string word, string InText)
+        public static bool SqlFilter(string word, string inText)
         {
-            if (InText == null)
+            if (inText == null)
                 return false;
             foreach (string i in word.Split('|'))
             {
-                if ((InText.ToLower().IndexOf(i + " ") > -1) || (InText.ToLower().IndexOf(" " + i) > -1))
+                if ((inText.ToLower().IndexOf(i + " ") > -1) || (inText.ToLower().IndexOf(" " + i) > -1))
                 {
                     return true;
                 }
@@ -627,13 +627,13 @@ namespace CommonLib
         /// <summary>
         /// 过滤特殊字符
         /// </summary>
-        /// <param name="Input"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public static string Htmls(string Input)
+        public static string Htmls(string input)
         {
-            if (Input != string.Empty && Input != null)
+            if (input != string.Empty && input != null)
             {
-                string ihtml = Input.ToLower();
+                string ihtml = input.ToLower();
                 ihtml = ihtml.Replace("<script", "&lt;script");
                 ihtml = ihtml.Replace("script>", "script&gt;");
                 ihtml = ihtml.Replace("<%", "&lt;%");

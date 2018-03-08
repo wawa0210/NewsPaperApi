@@ -20,18 +20,18 @@ namespace WebApi.Filter
     /// </summary>
     public class ExceptionHandlerMiddleWare
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
 
         public ExceptionHandlerMiddleWare(RequestDelegate next)
         {
-            this.next = next;
+            this._next = next;
         }
 
         public async Task Invoke(HttpContext context)
         {
             try
             {
-                await next(context);
+                await _next(context);
             }
             catch (Exception ex)
             {

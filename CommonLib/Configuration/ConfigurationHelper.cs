@@ -1,14 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
+using Microsoft.Extensions.Configuration;
 
-namespace CommonLib
+namespace CommonLib.Configuration
 {
     public class ConfigurationHelper
     {
-        public static IConfigurationRoot configurationRoot { get; set; }
+        private static IConfigurationRoot ConfigurationRoot { get; set; }
         //static ConfigurationHelper()
         //{
         //    var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -17,7 +14,7 @@ namespace CommonLib
 
         public static IConfigurationRoot GetInstance()
         {
-            if (configurationRoot != null) return configurationRoot;
+            if (ConfigurationRoot != null) return ConfigurationRoot;
 
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             return builder.Build();

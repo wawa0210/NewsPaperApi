@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Configgy.Microsoft.Extensions.Configuration" Version="1.0.3" />
     <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
-namespace CommonLib
+namespace CommonLib.Extensions
 {
     /// <summary>
     /// 字符串扩展类
@@ -12,11 +10,13 @@ namespace CommonLib
         public static int ToInt32(this string value, int defaultVal = 0)
         {
             if (string.IsNullOrEmpty(value)) return defaultVal;
-
-            var result = defaultVal;
-            int.TryParse(value, out result);
-
+            int.TryParse(value, out var result);
             return result;
+        }
+
+        public static T JsonToObj<T>(this string json)
+        {
+            return string.IsNullOrWhiteSpace(json) ? default(T) : JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

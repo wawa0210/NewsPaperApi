@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CommonLib;
+using CommonLib.Extensions;
 using Dapper;
 using EmergencyBaseService;
 using EmergencyData.MicroOrm.SqlGenerator;
@@ -114,7 +115,7 @@ namespace PaperNewsService.Application
 
         public async Task<PageBase<EntityListNews>> GetPageNewsInfoAsync(EntityNewQuery entityNewQuery)
         {
-            var versionStatus = await VersionService.GetVersionStatus(entityNewQuery.versionId);
+            var versionStatus = await VersionService.GetVersionStatus(entityNewQuery.VersionId);
 
             var result = new PageBase<EntityListNews>
             {
@@ -197,12 +198,12 @@ namespace PaperNewsService.Application
         /// <returns></returns>
         public async Task<bool> RestoreNewsAsync(string newsId)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
-            var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == newsId);
             if (model == null) return false;
             model.IsEnable = true;
 
-            NewsRep.Update<TableNews>(model, item => new
+            newsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable
             });

@@ -13,14 +13,14 @@ namespace WebApi.Controllers
     [Route("v0/accounts")]
     public class AccountController : BaseApiController
     {
-        private IAccountService IAccountService { get; set; }
+        private IAccountService AccountService { get; set; }
 
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
         public AccountController(IAccountService iAccountService)
         {
-            IAccountService = iAccountService;
+            AccountService = iAccountService;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace WebApi.Controllers
         [Route("pwd")]
         public async Task<ResponseModel> UpdateAccountPwd([FromBody]EntityAccountPwd entityAccountPwd)
         {
-            await IAccountService.UpdateAccountPwd(entityAccountPwd);
+            await AccountService.UpdateAccountPwd(entityAccountPwd);
             return Success("更新成功");
         }
     }
