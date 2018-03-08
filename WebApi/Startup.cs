@@ -54,7 +54,7 @@ namespace WebApi
             });
             services.AddMvc(options =>
             {
-                options.Filters.Add(typeof(AuthenticationFilter));
+                //options.Filters.Add(typeof(AuthenticationFilter));
                 options.Filters.Add(typeof(ValidationActionFilter));
             });
 
