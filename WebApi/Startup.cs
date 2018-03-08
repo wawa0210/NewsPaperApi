@@ -19,7 +19,7 @@ namespace WebApi
     public class Startup
     {
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -29,9 +29,13 @@ namespace WebApi
              .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
              .AddEnvironmentVariables();
             Configuration = builder.Build();
+            StaticConfiguration = configuration;
         }
 
+        public IConfiguration StaticConfiguration { get; }
+
         public IConfigurationRoot Configuration { get; }
+
         public IContainer ApplicationContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -52,14 +56,16 @@ namespace WebApi
                 options.Filters.Add(typeof(AuthenticationFilter));
                 options.Filters.Add(typeof(ValidationActionFilter));
             });
-            services.AddMvc();
 
             //注入配置信息
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            ApplicationContainer = AutofacBuilder.Builder(services);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
                     .AddJwtBearer(options =>
                     {
                         options.TokenValidationParameters = new TokenValidationParameters
@@ -68,13 +74,15 @@ namespace WebApi
                             ValidateAudience = true,
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
-                            ValidIssuer = Configuration.GetSection("jwt").GetSection("issure").Value,
-                            ValidAudience = Configuration.GetSection("jwt").GetSection("audience").Value,
+                            ValidIssuer = StaticConfiguration["jwt:issure"],
+                            ValidAudience = StaticConfiguration["jwt:audience"],
                             IssuerSigningKey = new SymmetricSecurityKey(
-                                Encoding.UTF8.GetBytes(Configuration.GetSection("jwt").GetSection("securitykey").Value))
+                                Encoding.UTF8.GetBytes(StaticConfiguration["jwt:securitykey"]))
                         };
                     });
 
+            ApplicationContainer = AutofacBuilder.Builder(services);
+            services.AddMvc();
             // Create the IServiceProvider based on the container.
             return new AutofacServiceProvider(ApplicationContainer);
 
@@ -84,6 +92,8 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseMiddleware<ExceptionHandlerMiddleWare>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -91,7 +101,6 @@ namespace WebApi
             app.UseCors("any");
             MapperInit.InitMapping();
             app.UseExceptionless("riuCGjWnRDEXcvLASaeRHVdYE9OxHyFtb9SBXPvU");
-            app.UseMiddleware<ExceptionHandlerMiddleWare>();
             app.UseAuthentication();
             app.UseMvc();
             app.UseStaticFiles();

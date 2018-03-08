@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using EmergencyEntity.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PaperNewsService.Application;
@@ -30,7 +31,7 @@ namespace WebApi.Controllers
         /// 获得新闻详细信息
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet, Authorize]
         [Route("{newsId}")]
         public async Task<ResponseModel> GetNewsbyIdAsync(string newsId)
         {

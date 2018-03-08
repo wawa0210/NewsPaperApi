@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EmergencyAccount\EmergencyAccount.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\PaperNewsService\PaperNewsService.csproj" />
   </ItemGroup>
 

@@ -87,7 +87,7 @@ namespace WebApi.Controllers
         protected ResponseModel Fail(ErrorCodeEnum errorCode)
         {
             //获得枚举值对应错误信息
-            var errorDescription = EnumExtensionHelper.ToEnumDescriptionString((int)errorCode, typeof(ErrorCodeEnum));
+            var errorDescription = ((int)errorCode).ToEnumDescriptionString(typeof(ErrorCodeEnum));
             if (string.IsNullOrEmpty(errorDescription))
             {
                 errorDescription = "未知错误";
