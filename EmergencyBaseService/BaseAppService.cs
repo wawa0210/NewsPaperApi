@@ -1,11 +1,5 @@
 ﻿using EmergencyData.MicroOrm;
-using MySql.Data.MySqlClient;
-using System;
 using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using Microsoft.Extensions.Configuration;
-using System.Configuration;
 using EmergencyData.MicroOrm.SqlGenerator;
 
 namespace EmergencyBaseService

@@ -1,12 +1,7 @@
-﻿using CommonLib;
-using Qiniu.IO;
+﻿using Qiniu.IO;
 using Qiniu.IO.Model;
 using Qiniu.Util;
 using Qiniu.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CommonLib.Extensions;
 using EmergencyEntity.Configuration;
 using Microsoft.Extensions.Options;

@@ -1,10 +1,6 @@
 ﻿using EmergencyEntity.PageQuery;
 using PaperNewsService.Entity;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using PaperNewsService.Model;
 
 namespace PaperNewsService.Application
 {

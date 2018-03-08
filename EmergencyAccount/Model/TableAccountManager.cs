@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace EmergencyAccount.Model
 {
@@ -63,10 +61,7 @@ namespace EmergencyAccount.Model
         [Description("")]
         public string Id
         {
-            get
-            {
-                return _id;
-            }
+            get => _id;
             set
             {
                 _id = value;
@@ -80,10 +75,7 @@ namespace EmergencyAccount.Model
         [Description("角色编号")]
         public int RoleId
         {
-            get
-            {
-                return _roleId;
-            }
+            get => _roleId;
             set
             {
                 _roleId = value;
@@ -97,10 +89,7 @@ namespace EmergencyAccount.Model
         [Description("部门编号")]
         public int DeptId
         {
-            get
-            {
-                return _deptId;
-            }
+            get => _deptId;
             set
             {
                 _deptId = value;
@@ -114,10 +103,7 @@ namespace EmergencyAccount.Model
         [Description("用户名")]
         public string UserName
         {
-            get
-            {
-                return _userName == null ? string.Empty : _userName.Trim();
-            }
+            get => _userName == null ? string.Empty : _userName.Trim();
             set
             {
                 _userName = value;
@@ -131,10 +117,7 @@ namespace EmergencyAccount.Model
         [Description("用户密码")]
         public string UserPwd
         {
-            get
-            {
-                return _userPwd == null ? string.Empty : _userPwd.Trim();
-            }
+            get => _userPwd == null ? string.Empty : _userPwd.Trim();
             set
             {
                 _userPwd = value;
@@ -148,10 +131,7 @@ namespace EmergencyAccount.Model
         [Description("密码盐")]
         public string UserSalt
         {
-            get
-            {
-                return _userSalt == null ? string.Empty : _userSalt.Trim();
-            }
+            get => _userSalt == null ? string.Empty : _userSalt.Trim();
             set
             {
                 _userSalt = value;
@@ -165,10 +145,7 @@ namespace EmergencyAccount.Model
         [Description("真实姓名")]
         public string RealName
         {
-            get
-            {
-                return _realName == null ? string.Empty : _realName.Trim();
-            }
+            get => _realName == null ? string.Empty : _realName.Trim();
             set
             {
                 _realName = value;
@@ -182,10 +159,7 @@ namespace EmergencyAccount.Model
         [Description("电话号码")]
         public string Tel
         {
-            get
-            {
-                return _tel == null ? string.Empty : _tel.Trim();
-            }
+            get => _tel == null ? string.Empty : _tel.Trim();
             set
             {
                 _tel = value;
@@ -199,10 +173,7 @@ namespace EmergencyAccount.Model
         [Description("是否可用")]
         public int IsLock
         {
-            get
-            {
-                return _isLock;
-            }
+            get => _isLock;
             set
             {
                 _isLock = value;
@@ -216,10 +187,7 @@ namespace EmergencyAccount.Model
         [Description("是否可用")]
         public int Level
         {
-            get
-            {
-                return _level;
-            }
+            get => _level;
             set
             {
                 _level = value;
@@ -233,10 +201,7 @@ namespace EmergencyAccount.Model
         [Description("添加时间")]
         public DateTime? AddTime
         {
-            get
-            {
-                return _addTime;
-            }
+            get => _addTime;
             set
             {
                 _addTime = value;

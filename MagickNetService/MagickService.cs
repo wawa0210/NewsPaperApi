@@ -1,5 +1,4 @@
-﻿using CommonLib;
-using ImageMagick;
+﻿using ImageMagick;
 using MagickNetService.Entity;
 using System;
 using System.Collections.Generic;

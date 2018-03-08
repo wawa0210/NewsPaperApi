@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using PaperNewsService.Entity;
 using PaperNewsService.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebApi.FrameWork
 {

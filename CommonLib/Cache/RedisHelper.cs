@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CommonLib.Configuration;
 using CommonLib.Extensions;
 using CommonLib.Logger;
-using log4net;
-using Microsoft.IdentityModel.Protocols;
 using StackExchange.Redis;
 
 namespace CommonLib.Cache
@@ -124,7 +121,7 @@ namespace CommonLib.Cache
         /// <returns></returns>
         public static bool StringSet(List<KeyValuePair<RedisKey, RedisValue>> keyValues)
         {
-            List<KeyValuePair<RedisKey, RedisValue>> newkeyValues =
+            var newkeyValues =
                 keyValues.Select(p => new KeyValuePair<RedisKey, RedisValue>(p.Key, p.Value)).ToList();
             return Do(db => db.StringSet(newkeyValues.ToArray()));
         }
@@ -231,7 +228,7 @@ namespace CommonLib.Cache
         /// <returns></returns>
         public static async Task<bool> StringSetAsync(List<KeyValuePair<RedisKey, RedisValue>> keyValues)
         {
-            List<KeyValuePair<RedisKey, RedisValue>> newkeyValues =
+            var newkeyValues =
                 keyValues.Select(p => new KeyValuePair<RedisKey, RedisValue>(p.Key, p.Value)).ToList();
             return await Do(db => db.StringSetAsync(newkeyValues.ToArray()));
         }
@@ -246,7 +243,7 @@ namespace CommonLib.Cache
         /// <returns></returns>
         public static async Task<bool> StringSetAsync<T>(string key, T obj, int secondTimeout)
         {
-            string json = ConvertJson(obj);
+            var json = ConvertJson(obj);
             return await Do(db => db.StringSetAsync(key, json, TimeSpan.FromSeconds(secondTimeout)));
         }
 
@@ -348,7 +345,7 @@ namespace CommonLib.Cache
         {
             return Do(db =>
             {
-                string json = ConvertJson(t);
+                var json = ConvertJson(t);
                 return db.HashSet(key, dataKey, json);
             });
         }
@@ -426,7 +423,7 @@ namespace CommonLib.Cache
         {
             return Do(db =>
             {
-                RedisValue[] values = db.HashKeys(key);
+                var values = db.HashKeys(key);
                 return ConvetList<T>(values);
             });
         }
@@ -458,7 +455,7 @@ namespace CommonLib.Cache
         {
             return await Do(db =>
             {
-                string json = ConvertJson(t);
+                var json = ConvertJson(t);
                 return db.HashSetAsync(key, dataKey, json);
             });
         }
@@ -554,7 +551,7 @@ namespace CommonLib.Cache
         /// <returns></returns>
         public static async Task<List<T>> HashKeysAsync<T>(string key)
         {
-            RedisValue[] values = await Do(db => db.HashKeysAsync(key));
+            var values = await Do(db => db.HashKeysAsync(key));
             return ConvetList<T>(values);
         }
 
@@ -889,7 +886,7 @@ namespace CommonLib.Cache
 
         private static string ConvertJson<T>(T value)
         {
-            string result = value is string ? value.ToString() : value.ToJson();
+            var result = value is string ? value.ToString() : value.ToJson();
             return result;
         }
 
@@ -904,7 +901,7 @@ namespace CommonLib.Cache
 
         private static List<T> ConvetList<T>(RedisValue[] values)
         {
-            List<T> result = new List<T>();
+            var result = new List<T>();
             foreach (var item in values)
             {
                 var model = ConvertObj<T>(item);

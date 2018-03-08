@@ -86,10 +86,7 @@ namespace EmergencyData.MicroOrm.SqlGenerator
         public PropertyInfo[] AllProperties { get; private set; }
         public ESqlConnector SqlConnector { get; set; }
 
-        public bool IsIdentity
-        {
-            get { return IdentityProperty != null; }
-        }
+        public bool IsIdentity => IdentityProperty != null;
 
         public bool LogicalDelete { get; private set; }
         public string TableName { get; private set; }

@@ -1,18 +1,11 @@
 ﻿using Exceptionless;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using CommonLib;
 using CommonLib.Logger;
-using log4net;
-using Microsoft.Extensions.Logging;
 
 namespace WebApi.Filter
 {
@@ -86,10 +79,10 @@ namespace WebApi.Filter
         /// <returns></returns>
         private static string Object2XmlString(object o)
         {
-            StringWriter sw = new StringWriter();
+            var sw = new StringWriter();
             try
             {
-                XmlSerializer serializer = new XmlSerializer(o.GetType());
+                var serializer = new XmlSerializer(o.GetType());
                 serializer.Serialize(sw, o);
             }
             catch

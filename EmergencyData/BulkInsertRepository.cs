@@ -35,10 +35,8 @@ namespace EmergencyData
         public PropertyMetadata IdentityProperty { get; private set; }
         public IEnumerable<PropertyMetadata> BaseProperties { get; private set; }
         public PropertyInfo[] AllProperties { get; private set; }
-        public bool IsIdentity
-        {
-            get { return IdentityProperty != null; }
-        }
+        public bool IsIdentity => IdentityProperty != null;
+
         public void BulkInsertAll(IEnumerable<T> entities, IDbTransaction trans = null)
         {
             using (var bulkCopy = new SqlBulkCopy((SqlConnection)Connection, SqlBulkCopyOptions.Default, (SqlTransaction)trans))

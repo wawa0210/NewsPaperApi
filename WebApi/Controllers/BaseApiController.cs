@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CommonLib;
+﻿using System.Linq;
 using CommonLib.Extensions;
 using EmergencyAccount.Entity;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 
@@ -18,10 +12,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// 获取登陆用户的相关信息
         /// </summary>
-        protected EntityAccountManager CurrentUser
-        {
-            get { return GetUserContext(); }
-        }
+        protected EntityAccountManager CurrentUser => GetUserContext();
 
         /// <summary>
         ///     获取登陆用户的相关信息

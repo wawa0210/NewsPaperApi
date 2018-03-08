@@ -11,13 +11,7 @@ namespace EmergencyData
 
         protected readonly IDbConnection InnerConnection;
 
-        public virtual IDbConnection Connection
-        {
-            get
-            {
-                return InnerConnection;
-            }
-        }
+        public virtual IDbConnection Connection => InnerConnection;
 
         public void Dispose()
         {

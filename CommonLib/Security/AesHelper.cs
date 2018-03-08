@@ -10,18 +10,12 @@ namespace CommonLib.Security
         /// <summary>
         /// 获取密钥
         /// </summary>
-        private static string Key
-        {
-            get { return @")O[NB]6,YF}+efcaj{+oESb9d8>Z'e9M"; }
-        }
+        private static string Key => @")O[NB]6,YF}+efcaj{+oESb9d8>Z'e9M";
 
         /// <summary>
         /// 获取向量
         /// </summary>
-        private static string Iv
-        {
-            get { return @"L+\~f4,Ir)b$=pkf"; }
-        }
+        private static string Iv => @"L+\~f4,Ir)b$=pkf";
 
         /// <summary>
         /// AES加密
@@ -107,7 +101,7 @@ namespace CommonLib.Security
         public static string Decrypt(string encryptStr, bool returnNull = true)
         {
             var decrypt = AesDecrypt(encryptStr);
-            return returnNull ? decrypt : (decrypt == null ? String.Empty : decrypt);
+            return returnNull ? decrypt : (decrypt ?? String.Empty);
         }
 
     }

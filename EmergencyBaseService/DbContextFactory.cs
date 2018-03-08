@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
-using System.Text;
 using CommonLib.Configuration;
 using EmergencyData.MicroOrm.SqlGenerator;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
 namespace EmergencyBaseService
