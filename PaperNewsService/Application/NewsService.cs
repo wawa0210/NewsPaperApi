@@ -170,7 +170,7 @@ namespace PaperNewsService.Application
             strSql.Append(@"
                             order by createTime desc
                         ");
-            strSql.Append(@" limit @startIndex,@endIndex ");
+            strSql.Append(@" limit @startIndex,@pageSize ");
 
             var paras = new DynamicParameters(new
             {
@@ -178,7 +178,7 @@ namespace PaperNewsService.Application
                 isEnable = entityNewQuery.IsEnable,
                 title = "%" + entityNewQuery.Title + "%",
                 startIndex = (entityNewQuery.CurrentPage - 1) * entityNewQuery.PageSize,
-                endIndex = entityNewQuery.CurrentPage * entityNewQuery.PageSize
+                pageSize = entityNewQuery.PageSize
             });
             var newsRep = GetRepositoryInstance<TableNews>();
 
