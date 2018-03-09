@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
+    <ProjectReference Include="..\EmergencyAccount\EmergencyAccount.csproj" />
   </ItemGroup>
 
 </Project>

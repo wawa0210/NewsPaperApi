@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using EmergencyAccount.Entity;
 using EmergencyEntity.Configuration;
+using Infrastructure.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -38,9 +40,6 @@ namespace WebApi.Controllers
         [Route("{newsId}")]
         public async Task<ResponseModel> GetNewsbyIdAsync(string newsId)
         {
-            var currentUser = HttpContext.User;
-            var userContext = currentUser.Claims.FirstOrDefault().Value;
-
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
             return Success(await NewsService.GetNewsIntfByIdAsync(newsId));
         }

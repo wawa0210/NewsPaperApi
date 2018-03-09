@@ -1,5 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using CommonLib.Extensions;
+using EmergencyAccount.Entity;
+using Infrastructure.Context;
 using Infrastructure.Exception;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -10,16 +14,22 @@ namespace WebApi.Filter
     {
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            //if (context.ActionDescriptor.FilterDescriptors.Any(x => x.Filter.GetType() == typeof(AllowAnonymousFilter))) return;
-            //var request = context.HttpContext.Request.Headers;
-
-            //var tokenKey = request.SingleOrDefault(x => x.Key.ToLower() == "token");
-            //var token = tokenKey.Key == null ? string.Empty : tokenKey.Value.FirstOrDefault();
-
-            //if (string.IsNullOrWhiteSpace(token))
-           throw new ApiException(ApiStatusEnum.NotAuthenticated);
-
-            //return;
+            if (context.ActionDescriptor.FilterDescriptors.Any(x => x.Filter.GetType() == typeof(AuthorizeFilter)))
+            {
+                var currentUser = context.HttpContext.User;
+                var userContextStr = currentUser.Claims.FirstOrDefault()?.Value;
+                if(string.IsNullOrWhiteSpace(userContextStr)) throw new ApiException(ApiStatusEnum.NotAuthenticated);
+                try
+                {
+                    var userContext = userContextStr.JsonToObj<EntityAccountManager>();
+                    if (userContext == null) throw new ApiException(ApiStatusEnum.NotAuthenticated);
+                    CallContext<EntityAccountManager>.SetData("userContext",userContext);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(ApiStatusEnum.NotAuthenticated);
+                }
+            }
             await base.OnActionExecutionAsync(context, next);
         }
     }
