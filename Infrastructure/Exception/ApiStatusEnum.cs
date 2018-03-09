@@ -22,7 +22,7 @@ namespace Infrastructure.Exception
         /// <summary>
         /// 
         /// </summary>
-        [Description("未登录")]
+        [Description("授权验证不通过，尝试重新登录")]
         NotAuthenticated = 401,
         /// <summary>
         /// 账户权限不足

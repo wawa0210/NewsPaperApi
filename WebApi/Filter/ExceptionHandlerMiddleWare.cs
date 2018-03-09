@@ -29,6 +29,13 @@ namespace WebApi.Filter
             try
             {
                 await _next(context);
+
+                var responseStatusCode = context.Response.StatusCode;
+
+                if (responseStatusCode != (int)ApiStatusEnum.Ok)
+                {
+                    throw new ApiException((ApiStatusEnum)responseStatusCode);
+                }
             }
             catch (Exception ex)
             {
