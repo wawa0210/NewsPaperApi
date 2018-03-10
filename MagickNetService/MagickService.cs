@@ -67,7 +67,7 @@ namespace MagickNetService
             var wechatCodeImgHeight = 168;
 
             //标题图片总高度
-            var titleHeight = titleTopMrgin + titleSpaceLine + titleFontHeight * titleArray.Length + (titleArray.Length - 1) + titleFontPadding;
+            var titleHeight = titleTopMrgin + titleSpaceLine + titleFontHeight * titleArray.Length + (titleArray.Length - 1) * titleFontPadding;
 
             //新闻内容模块总高度
             var contentHeight = contentTopMrgin + contentBottomMargin + wordsArray.Length * contentFontHeight + (wordsArray.Length - 1) * contentFontPadding;
@@ -86,7 +86,7 @@ namespace MagickNetService
                         new Drawables()
                             .TextEncoding(Encoding.UTF8)
                             .TextAntialias(true)
-                            .FontPointSize(55)
+                            .FontPointSize(52)
                             .FillColor(new MagickColor(126, 99, 43))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
@@ -100,13 +100,11 @@ namespace MagickNetService
                         var endWidth = 35 + 10 * i;
 
                         //头部间隔线
-                        new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(beginWidth, titleHeight+20, endWidth, titleHeight+20).Draw(mainImgImage);
+                        new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(beginWidth, titleHeight, endWidth, titleHeight).Draw(mainImgImage);
                     }
 
                     for (var i = 0; i < wordsArray.Length; i++)
                     {
-                        var bodyBorderHeight = 90;
-
                         new Drawables()
                             .TextEncoding(Encoding.UTF8)
                             .TextAntialias(true)
@@ -114,7 +112,7 @@ namespace MagickNetService
                             .FillColor(new MagickColor(102, 102, 102))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
-                            .Text(contentPadding, titleHeight + bodyBorderHeight + (contentFontPadding + contentFontHeight) * i, wordsArray[i])
+                            .Text(contentPadding, titleHeight + contentTopMrgin + (contentFontPadding + contentFontHeight) * i, wordsArray[i])
                             .Draw(mainImgImage);
                     }
                     //尾部
