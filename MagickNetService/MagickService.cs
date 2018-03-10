@@ -14,18 +14,71 @@ namespace MagickNetService
         {
             var typeSettingHelper = new TypeSettingHelper();
 
-            var wordsArray = typeSettingHelper.GetTypeSettingArray(entityNewsModel.Content, 40);
+            //内容
+            var wordsArray = typeSettingHelper.GetTypeSettingArray(entityNewsModel.Content, 36);
             var titleArray = typeSettingHelper.GetTypeSettingArray(entityNewsModel.Title, 28);
 
-            var titleHeight = titleArray.Length * 100 + 100;
-            var contentHeight = wordsArray.Length * 80 + 80;
+            //主图左边距
+            var mainImgMarginLeft = 93;
+
+            //标题距离顶部间距
+            var titleTopMrgin = 63;
+
+            //标题字体高度
+            var titleFontHeight = 50;
+
+            //标题字体上下间距
+            var titleFontPadding = 40;
+
+            //标题距离横线间距
+            var titleSpaceLine = 88;
+
+            //内容填充边距
+            var contentPadding = 62;
+
+            //主图上边距
+            var mainImgMarginTop = 140;
+
+            //主图宽度
+            var mainImgWidth = 894;
+
+            //内容距离横线上边距
+            var contentTopMrgin = 90;
+
+            //内容字体上下间距
+            var contentFontPadding = 49;
+
+            //内容字体高度
+            var contentFontHeight = 40;
+
+            //内容距离下边距
+            var contentBottomMargin = 102;
+
+            //底部高度，包含二维码
+            var bottomHeight = 321;
+
+            //二维码上边距
+            var wechatCodeTopMargin = 71;
+
+            //二维码左边距
+            var wechatCodeLeftMargin = 337;
+
+            //微信二维码图片高度
+            var wechatCodeImgHeight = 168;
+
+            //标题图片总高度
+            var titleHeight = titleTopMrgin + titleSpaceLine + titleFontHeight * titleArray.Length + (titleArray.Length - 1) + titleFontPadding;
+
+            //新闻内容模块总高度
+            var contentHeight = contentTopMrgin + contentBottomMargin + wordsArray.Length * contentFontHeight + (wordsArray.Length - 1) * contentFontPadding;
+
             var microsoftYaheiUi = "SimHei";
-            var picHeight = titleHeight + contentHeight + 50;
+            var picHeight = titleHeight + contentHeight;
             var lineColor = new MagickColor("gray");
 
-            using (var image = new MagickImage(new MagickColor("#F9F8F6"), 1080, picHeight + 550))
+            using (var image = new MagickImage(new MagickColor("#F9F8F6"), 1080, picHeight + bottomHeight + mainImgMarginTop))
             {
-                using (var mainImgImage = new MagickImage(new MagickColor("#FFFFFF"), 900, picHeight))
+                using (var mainImgImage = new MagickImage(new MagickColor("#FFFFFF"), mainImgWidth, picHeight))
                 {
                     //title
                     for (var i = 0; i < titleArray.Length; i++)
@@ -33,19 +86,17 @@ namespace MagickNetService
                         new Drawables()
                             .TextEncoding(Encoding.UTF8)
                             .TextAntialias(true)
-                            .FontPointSize(58)
-                            .FillColor(new MagickColor("#856D32"))
+                            .FontPointSize(55)
+                            .FillColor(new MagickColor(126, 99, 43))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
-                            .Text(50, 80 + 90 * i, titleArray[i])
+                            .Text(contentPadding, titleTopMrgin + ((titleFontHeight + titleFontPadding) * i), titleArray[i])
                             .Draw(mainImgImage);
-
                     }
 
-                    for (var i = 0; i < 82; i++)
+                    for (var i = 2; i < 81; i++)
                     {
                         var beginWidth = 30 + 10 * i;
-
                         var endWidth = 35 + 10 * i;
 
                         //头部间隔线
@@ -54,33 +105,46 @@ namespace MagickNetService
 
                     for (var i = 0; i < wordsArray.Length; i++)
                     {
+                        var bodyBorderHeight = 90;
+
                         new Drawables()
                             .TextEncoding(Encoding.UTF8)
                             .TextAntialias(true)
-                            .FontPointSize(40)
-                            .FillColor(new MagickColor("#4D4D4D"))
+                            .FontPointSize(43)
+                            .FillColor(new MagickColor(102, 102, 102))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
-                            .Text(50, titleHeight + 70 + 80 * i, wordsArray[i])
+                            .Text(contentPadding, titleHeight + bodyBorderHeight + (contentFontPadding + contentFontHeight) * i, wordsArray[i])
                             .Draw(mainImgImage);
                     }
                     //尾部
                     //new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(20, picHeight - 180, 880, picHeight - 180).Draw(mainImgImage);
                     mainImgImage.Border(1);
                     mainImgImage.BorderColor = new MagickColor("#4D4D4D");
-
-                    image.Composite(mainImgImage, 90, 150, CompositeOperator.Over);
+                    image.Composite(mainImgImage, mainImgMarginLeft, mainImgMarginTop, CompositeOperator.Over);
                 }
 
                 //小程序二维码 
                 var client = new WebClient();
                 using (var watermark = new MagickImage(client.DownloadData("http://img.blockcomet.com/wechatCode.png")))
                 {
-                    var size = new MagickGeometry(200, 200) { IgnoreAspectRatio = true };
+                    var size = new MagickGeometry(wechatCodeImgHeight, wechatCodeImgHeight) { IgnoreAspectRatio = true };
                     watermark.Resize(size);
                     watermark.Evaluate(Channels.Black, EvaluateOperator.Divide, 4);
-                    image.Composite(watermark, 440, picHeight + 230, CompositeOperator.Over);
+
+                    image.Composite(watermark, wechatCodeLeftMargin, picHeight + wechatCodeTopMargin + mainImgMarginTop, CompositeOperator.Over);
                 }
+
+                new Drawables()
+                        .TextEncoding(Encoding.UTF8)
+                        .TextAntialias(true)
+                        .FontPointSize(50)
+                        .FillColor(new MagickColor(102, 102, 102))
+                        .Gravity(Gravity.Northwest)
+                        .Font(microsoftYaheiUi)
+                        .Text(wechatCodeImgHeight + wechatCodeLeftMargin + 30, picHeight + mainImgMarginTop + 123, "彗星播报")
+                        .Draw(image);
+
                 return image.ToByteArray(MagickFormat.Jpg);
             }
             //return imgUrl;

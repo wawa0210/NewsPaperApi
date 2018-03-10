@@ -11,6 +11,12 @@ namespace MagickNetService
     /// </summary>
     public class TypeSettingHelper
     {
+        /// <summary>
+        /// 把字符串按照指定长度切割(英文单词不拆分)
+        /// </summary>
+        /// <param name="strContent">字符串</param>
+        /// <param name="splitLength">分割字节数</param>
+        /// <returns></returns>
         public string[] GetTypeSettingArray(string strContent, int splitLength)
         {
             var strArray = GetSplitStrByte(strContent);
