@@ -85,7 +85,7 @@ namespace MagickNetService
                         new Drawables()
                             .TextEncoding(Encoding.UTF8)
                             .TextAntialias(true)
-                            .FontPointSize(52)
+                            .FontPointSize(55)
                             .FillColor(new MagickColor(126, 99, 43))
                             .Gravity(Gravity.Northwest)
                             .Font(microsoftYaheiUi)
