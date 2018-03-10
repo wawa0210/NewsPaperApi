@@ -99,7 +99,7 @@ namespace MagickNetService
                         var endWidth = 35 + 10 * i;
 
                         //头部间隔线
-                        new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(beginWidth, titleHeight, endWidth, titleHeight).Draw(mainImgImage);
+                        new Drawables().StrokeWidth(0.5).StrokeColor(lineColor).Line(beginWidth, titleHeight+20, endWidth, titleHeight+20).Draw(mainImgImage);
                     }
 
                     for (var i = 0; i < wordsArray.Length; i++)
