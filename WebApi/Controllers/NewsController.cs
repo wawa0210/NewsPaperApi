@@ -100,7 +100,7 @@ namespace WebApi.Controllers
         {
             var newsInfo = await NewsService.AddNewsAsync(entityNews);
             await UpdateNewsImgAsync(newsInfo);
-            return Success("新增成功");
+            return Success(newsInfo);
         }
 
         /// <summary>
