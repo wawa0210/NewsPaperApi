@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EmergencyEntity.Configuration;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PaperNewsService.Application;
@@ -104,7 +100,7 @@ namespace WebApi.Controllers
         {
             var newsInfo = await NewsService.AddNewsAsync(entityNews);
             await UpdateNewsImgAsync(newsInfo);
-            return Success("新增成功");
+            return Success(newsInfo);
         }
 
         /// <summary>

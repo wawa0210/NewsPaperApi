@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PaperNewsService.Enum
+﻿namespace PaperNewsService.Enum
 {
     public enum EnumVersionStatus : int
     {

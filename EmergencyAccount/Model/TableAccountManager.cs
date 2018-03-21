@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace EmergencyAccount.Model
 {
@@ -13,17 +11,17 @@ namespace EmergencyAccount.Model
     {
         #region 私有成员
         //在这里设置字段的默认值
-        private string _Id;
-        private int _RoleId;
-        private int _DeptId;
-        private string _UserName = string.Empty;
-        private string _UserPwd = string.Empty;
-        private string _UserSalt = string.Empty;
-        private string _RealName = string.Empty;
-        private string _Tel = string.Empty;
-        private int _IsLock;
-        private int _Level;
-        private DateTime? _AddTime;
+        private string _id;
+        private int _roleId;
+        private int _deptId;
+        private string _userName = string.Empty;
+        private string _userPwd = string.Empty;
+        private string _userSalt = string.Empty;
+        private string _realName = string.Empty;
+        private string _tel = string.Empty;
+        private int _isLock;
+        private int _level;
+        private DateTime? _addTime;
         #endregion
 
         #region 构造函数
@@ -36,19 +34,19 @@ namespace EmergencyAccount.Model
         /// <summary>
         /// 全参数构造函数
         /// </summary>
-        public TableAccountManager(string Id, int RoleId, int DeptId, string UserName, string UserPwd, string UserSalt, string RealName, string Tel, int IsLock, int Level, DateTime? AddTime)
+        public TableAccountManager(string id, int roleId, int deptId, string userName, string userPwd, string userSalt, string realName, string tel, int isLock, int level, DateTime? addTime)
         {
-            _Id = Id;
-            _RoleId = RoleId;
-            _DeptId = DeptId;
-            _UserName = UserName;
-            _UserPwd = UserPwd;
-            _UserSalt = UserSalt;
-            _RealName = RealName;
-            _Tel = Tel;
-            _IsLock = IsLock;
-            _Level = Level;
-            _AddTime = AddTime;
+            _id = id;
+            _roleId = roleId;
+            _deptId = deptId;
+            _userName = userName;
+            _userPwd = userPwd;
+            _userSalt = userSalt;
+            _realName = realName;
+            _tel = tel;
+            _isLock = isLock;
+            _level = level;
+            _addTime = addTime;
 
         }
         #endregion
@@ -63,13 +61,10 @@ namespace EmergencyAccount.Model
         [Description("")]
         public string Id
         {
-            get
-            {
-                return _Id;
-            }
+            get => _id;
             set
             {
-                _Id = value;
+                _id = value;
             }
         }
 
@@ -80,13 +75,10 @@ namespace EmergencyAccount.Model
         [Description("角色编号")]
         public int RoleId
         {
-            get
-            {
-                return _RoleId;
-            }
+            get => _roleId;
             set
             {
-                _RoleId = value;
+                _roleId = value;
             }
         }
 
@@ -97,13 +89,10 @@ namespace EmergencyAccount.Model
         [Description("部门编号")]
         public int DeptId
         {
-            get
-            {
-                return _DeptId;
-            }
+            get => _deptId;
             set
             {
-                _DeptId = value;
+                _deptId = value;
             }
         }
 
@@ -114,13 +103,10 @@ namespace EmergencyAccount.Model
         [Description("用户名")]
         public string UserName
         {
-            get
-            {
-                return _UserName == null ? string.Empty : _UserName.Trim();
-            }
+            get => _userName == null ? string.Empty : _userName.Trim();
             set
             {
-                _UserName = value;
+                _userName = value;
             }
         }
 
@@ -131,13 +117,10 @@ namespace EmergencyAccount.Model
         [Description("用户密码")]
         public string UserPwd
         {
-            get
-            {
-                return _UserPwd == null ? string.Empty : _UserPwd.Trim();
-            }
+            get => _userPwd == null ? string.Empty : _userPwd.Trim();
             set
             {
-                _UserPwd = value;
+                _userPwd = value;
             }
         }
 
@@ -148,13 +131,10 @@ namespace EmergencyAccount.Model
         [Description("密码盐")]
         public string UserSalt
         {
-            get
-            {
-                return _UserSalt == null ? string.Empty : _UserSalt.Trim();
-            }
+            get => _userSalt == null ? string.Empty : _userSalt.Trim();
             set
             {
-                _UserSalt = value;
+                _userSalt = value;
             }
         }
 
@@ -165,13 +145,10 @@ namespace EmergencyAccount.Model
         [Description("真实姓名")]
         public string RealName
         {
-            get
-            {
-                return _RealName == null ? string.Empty : _RealName.Trim();
-            }
+            get => _realName == null ? string.Empty : _realName.Trim();
             set
             {
-                _RealName = value;
+                _realName = value;
             }
         }
 
@@ -182,13 +159,10 @@ namespace EmergencyAccount.Model
         [Description("电话号码")]
         public string Tel
         {
-            get
-            {
-                return _Tel == null ? string.Empty : _Tel.Trim();
-            }
+            get => _tel == null ? string.Empty : _tel.Trim();
             set
             {
-                _Tel = value;
+                _tel = value;
             }
         }
 
@@ -199,13 +173,10 @@ namespace EmergencyAccount.Model
         [Description("是否可用")]
         public int IsLock
         {
-            get
-            {
-                return _IsLock;
-            }
+            get => _isLock;
             set
             {
-                _IsLock = value;
+                _isLock = value;
             }
         }
 
@@ -216,13 +187,10 @@ namespace EmergencyAccount.Model
         [Description("是否可用")]
         public int Level
         {
-            get
-            {
-                return _Level;
-            }
+            get => _level;
             set
             {
-                _Level = value;
+                _level = value;
             }
         }
 
@@ -233,13 +201,10 @@ namespace EmergencyAccount.Model
         [Description("添加时间")]
         public DateTime? AddTime
         {
-            get
-            {
-                return _AddTime;
-            }
+            get => _addTime;
             set
             {
-                _AddTime = value;
+                _addTime = value;
             }
         }
         #endregion

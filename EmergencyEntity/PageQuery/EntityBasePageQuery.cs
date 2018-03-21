@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EmergencyEntity.PageQuery
+﻿namespace EmergencyEntity.PageQuery
 {
     /// <summary>
     /// 分页基本查询参数

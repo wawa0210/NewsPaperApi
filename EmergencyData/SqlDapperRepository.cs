@@ -27,13 +27,7 @@ namespace EmergencyData
         }
 
 
-        public IDbConnection Connection
-        {
-            get
-            {
-                return _internalRepository.Connection;
-            }
-        }
+        public IDbConnection Connection => _internalRepository.Connection;
 
         private T ExecuteWithTryCatch<T>(Func<T> action, bool useTransaction = false)
         {

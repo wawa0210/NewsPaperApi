@@ -1,11 +1,6 @@
 ﻿using EmergencyData.MicroOrm;
-using MySql.Data.MySqlClient;
-using System;
 using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using Microsoft.Extensions.Configuration;
-using System.Configuration;
+using EmergencyData.MicroOrm.SqlGenerator;
 
 namespace EmergencyBaseService
 {
@@ -28,36 +23,14 @@ namespace EmergencyBaseService
         /// <returns></returns>
         protected virtual DapperRepository<T> GetRepositoryInstance<T>(string connStr = null) where T : class, new()
         {
-            //获取程序集名+类名，作为CallContext的key
-            var type = typeof(T);
-            //var typeName = type.Assembly.FullName + type.FullName;
-
-            //保证在同一个HTTP请求下，对象是单例的,优先从CallContext中取
-            //var repository = CallContext.GetData(typeName) as DapperRepository<T>;
-            //if (repository == null)
-            //{
             if (_connection == null)
             {
-                if (string.IsNullOrEmpty(connStr))
-                    connStr = GetConnectionStr();
-                _connection = new MySqlConnection(connStr);
+                _connection = DbContextFactory.CreateDbConnection(ESqlConnector.MySql, connStr);
             }
-            var repository = new DapperRepository<T>(_connection);
-            //CallContext.SetData(typeName, repository);
-            //}
+            var repository = new DapperRepository<T>(_connection, ESqlConnector.MySql);
             return repository;
         }
 
-        /// <summary>
-        /// 获取连接字符串
-        /// </summary>
-        /// <returns></returns>
-        private string GetConnectionStr()
-        {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-            var configRoot = builder.Build();
-            var conntectStr = configRoot.GetSection("db").GetSection("mysql").GetSection("connectionStr").Value;
-            return conntectStr;
-        }
+
     }
 }

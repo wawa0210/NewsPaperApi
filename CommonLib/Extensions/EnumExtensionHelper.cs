@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace CommonLib
+namespace CommonLib.Extensions
 {
     /// <summary>
     /// 枚举扩展帮助类
@@ -29,7 +29,29 @@ namespace CommonLib
             return collection.AllKeys.Select(key => collection[key]).ToList();
         }
 
+        /// <summary>
+        /// 取得枚举类型的说明文字
+        /// </summary>
+        /// <param name="objEnum"></param>
+        /// <returns></returns>
+        public static string GetEnumDescription(Enum objEnum)
+        {
+            var typeDescription = typeof(DescriptionAttribute);
+            var typeField = objEnum.GetType();
+            string strDesc;
+            try
+            {
+                var field = typeField.GetField(objEnum.ToString());
+                var arr = field.GetCustomAttributes(typeDescription, true);
+                strDesc = arr.Length > 0 ? (arr[0] as DescriptionAttribute)?.Description : field.Name;
+            }
+            catch
+            {
+                strDesc = string.Empty;
+            }
 
+            return strDesc;
+        }
 
         /// <summary>  
         /// 根据枚举类型得到其所有的 值 与 枚举定义字符串 的集合  

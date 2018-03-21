@@ -9,16 +9,9 @@ namespace EmergencyData.MicroOrm.SqlGenerator
 
         public string Alias { get; private set; }
 
-        public string ColumnName {
-            get
-            {
-                return string.IsNullOrEmpty(this.Alias) ? this.PropertyInfo.Name : this.Alias;
-            }
-        }
+        public string ColumnName => string.IsNullOrEmpty(this.Alias) ? this.PropertyInfo.Name : this.Alias;
 
-        public string Name {
-            get { return PropertyInfo.Name; }
-        }
+        public string Name => PropertyInfo.Name;
 
         public PropertyMetadata(PropertyInfo propertyInfo)
         {

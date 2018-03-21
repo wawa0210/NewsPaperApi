@@ -1,14 +1,9 @@
-﻿using CommonLib;
-using EmergencyAccount.Application;
+﻿using EmergencyAccount.Application;
 using EmergencyAccount.Entity;
-using EmergencyEntity.Configuration;
-using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using WebApi.FrameWork;
 using WebApi.Models;
-using WebApi.Qiniu;
 
 namespace WebApi.Controllers
 {
@@ -46,9 +41,11 @@ namespace WebApi.Controllers
             var checkResult = AccountService.CheckLoginInfo(loginModel.UserPwd, result.UserSalt, result.UserPwd);
             if (!checkResult) return Fail(ErrorCodeEnum.UserPwdCheckFaild);
 
+            //var token = new JwtManager().GenerateJwtToken(result);
+
             return Success(new
             {
-                token = AesHelper.Encrypt(JsonConvert.SerializeObject(result)),
+                token = new JwtManager().GenerateJwtToken(result),
                 userInfo = result
             });
         }

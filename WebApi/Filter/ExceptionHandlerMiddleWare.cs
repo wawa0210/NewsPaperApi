@@ -1,15 +1,11 @@
 ﻿using Exceptionless;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Microsoft.Extensions.Logging;
+using CommonLib.Logger;
 
 namespace WebApi.Filter
 {
@@ -18,25 +14,24 @@ namespace WebApi.Filter
     /// </summary>
     public class ExceptionHandlerMiddleWare
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
 
         public ExceptionHandlerMiddleWare(RequestDelegate next)
         {
-            this.next = next;
+            this._next = next;
         }
 
         public async Task Invoke(HttpContext context)
         {
             try
             {
-                await next(context);
+                await _next(context);
             }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex);
             }
         }
-
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             if (exception == null) return;
@@ -45,17 +40,25 @@ namespace WebApi.Filter
 
         private static async Task WriteExceptionAsync(HttpContext context, Exception exception)
         {
+            LogHelper.LogError("", exception);
+            LogHelper.LogInfo("asdasdhakslj");
+
+
             //记录日志
-            LoggerMessage.Define(LogLevel.Error, new EventId(1, nameof(InvalidCastException)), JsonConvert.SerializeObject(exception));
             exception.ToExceptionless().Submit();
             //返回友好的提示
             var response = context.Response;
 
             //状态码
-            if (exception is UnauthorizedAccessException)
-                response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            else if (exception is Exception)
-                response.StatusCode = (int)HttpStatusCode.BadRequest;
+            switch (exception)
+            {
+                case UnauthorizedAccessException _:
+                    response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    break;
+                case Exception _:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
+            }
 
             response.ContentType = context.Request.Headers["Accept"];
 
@@ -76,10 +79,10 @@ namespace WebApi.Filter
         /// <returns></returns>
         private static string Object2XmlString(object o)
         {
-            StringWriter sw = new StringWriter();
+            var sw = new StringWriter();
             try
             {
-                XmlSerializer serializer = new XmlSerializer(o.GetType());
+                var serializer = new XmlSerializer(o.GetType());
                 serializer.Serialize(sw, o);
             }
             catch

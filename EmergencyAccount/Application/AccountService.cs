@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CommonLib;
+using CommonLib.Security;
 using EmergencyAccount.Entity;
 using EmergencyAccount.Model;
 using EmergencyBaseService;
@@ -26,7 +25,7 @@ namespace EmergencyAccount.Application
 
         public bool CheckLoginInfo(string inputPwd, string salt, string dbPwd)
         {
-            var userPwd = DESEncrypt.Encrypt(inputPwd, salt);
+            var userPwd = DesEncrypt.Encrypt(inputPwd, salt);
             return userPwd == dbPwd;
         }
 
@@ -40,7 +39,7 @@ namespace EmergencyAccount.Application
             var model = new TableAccountManager()
             {
                 Id = entityAccountPwd.Id,
-                UserPwd = DESEncrypt.Encrypt(entityAccountPwd.UserPwd.Trim().Trim(), userSalt),
+                UserPwd = DesEncrypt.Encrypt(entityAccountPwd.UserPwd.Trim().Trim(), userSalt),
                 UserSalt = userSalt
             };
             var accountRep = GetRepositoryInstance<TableAccountManager>();

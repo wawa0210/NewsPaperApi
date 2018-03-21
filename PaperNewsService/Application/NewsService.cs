@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Dapper.Repositories;
 using AutoMapper;
-using CommonLib;
+using CommonLib.Extensions;
 using Dapper;
 using EmergencyBaseService;
 using EmergencyData.MicroOrm.SqlGenerator;
@@ -60,11 +59,11 @@ namespace PaperNewsService.Application
         /// <returns></returns>
         public async Task<bool> DeleteNewsAsync(string newsId)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
-            var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == newsId);
             if (model == null) return false;
             if (model.IsEnable) return false;
-            NewsRep.Delete(model);
+            newsRep.Delete(model);
             return true;
         }
 
@@ -116,7 +115,7 @@ namespace PaperNewsService.Application
 
         public async Task<PageBase<EntityListNews>> GetPageNewsInfoAsync(EntityNewQuery entityNewQuery)
         {
-            var versionStatus = await VersionService.GetVersionStatus(entityNewQuery.versionId);
+            var versionStatus = await VersionService.GetVersionStatus(entityNewQuery.VersionId);
 
             var result = new PageBase<EntityListNews>
             {
@@ -172,7 +171,7 @@ namespace PaperNewsService.Application
             strSql.Append(@"
                             order by createTime desc
                         ");
-            strSql.Append(@" limit @startIndex,@endIndex ");
+            strSql.Append(@" limit @startIndex,@pageSize ");
 
             var paras = new DynamicParameters(new
             {
@@ -180,7 +179,7 @@ namespace PaperNewsService.Application
                 isEnable = entityNewQuery.IsEnable,
                 title = "%" + entityNewQuery.Title + "%",
                 startIndex = (entityNewQuery.CurrentPage - 1) * entityNewQuery.PageSize,
-                endIndex = entityNewQuery.CurrentPage * entityNewQuery.PageSize
+                pageSize = entityNewQuery.PageSize
             });
             var newsRep = GetRepositoryInstance<TableNews>();
 
@@ -199,12 +198,12 @@ namespace PaperNewsService.Application
         /// <returns></returns>
         public async Task<bool> RestoreNewsAsync(string newsId)
         {
-            var NewsRep = GetRepositoryInstance<TableNews>();
-            var model = await NewsRep.FindAsync(x => x.NewsId == newsId);
+            var newsRep = GetRepositoryInstance<TableNews>();
+            var model = await newsRep.FindAsync(x => x.NewsId == newsId);
             if (model == null) return false;
             model.IsEnable = true;
 
-            NewsRep.Update<TableNews>(model, item => new
+            newsRep.Update<TableNews>(model, item => new
             {
                 item.IsEnable
             });

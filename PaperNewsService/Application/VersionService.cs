@@ -71,13 +71,13 @@ namespace PaperNewsService.Application
                             order by createTime desc
                         ");
 
-            strSql.Append(@" limit @startIndex,@endIndex ");
+            strSql.Append(@" limit @startIndex,@pageSize ");
 
             var paras = new DynamicParameters(new
             {
                 versionName = "%" + entityVersionQuery.VersionName + "%",
                 startIndex = (entityVersionQuery.CurrentPage - 1) * entityVersionQuery.PageSize,
-                endIndex = entityVersionQuery.CurrentPage * entityVersionQuery.PageSize
+                pageSize = entityVersionQuery.PageSize
             });
             var versionRep = GetRepositoryInstance<TableVersions>();
 

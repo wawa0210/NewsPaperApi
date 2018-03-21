@@ -5,6 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Configgy.Microsoft.Extensions.Configuration" Version="1.0.3" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.hosting.abstractions\2.0.1\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.configuration\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IdentityModel.Protocols">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.identitymodel.protocols\2.1.4\lib\netstandard1.4\Microsoft.IdentityModel.Protocols.dll</HintPath>
     </Reference>

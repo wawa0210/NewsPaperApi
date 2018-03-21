@@ -1,7 +1,4 @@
 ﻿using EmergencyEntity.PageQuery;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PaperNewsService.Entity
 {
@@ -38,7 +35,7 @@ namespace PaperNewsService.Entity
         /// <summary>
         /// 小程序版本号
         /// </summary>
-        public string versionId
+        public string VersionId
         {
             get; set;
         }
