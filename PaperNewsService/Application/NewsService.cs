@@ -27,7 +27,7 @@ namespace PaperNewsService.Application
 
         public async Task<EntityNews> AddNewsAsync(EntityNews entityNews)
         {
-            var newsRep = IDapperRepository<TableNews>();
+            var newsRep = GetRepositoryInstance<TableNews>();
             //var newsRep = GetRepositoryInstance<TableNews>();
 
             //新闻已存在，直接返回
