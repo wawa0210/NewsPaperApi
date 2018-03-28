@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Abp.Dapper.Repositories;
 using AutoMapper;
 using CommonLib.Extensions;
 using Dapper;
