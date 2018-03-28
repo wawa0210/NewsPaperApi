@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagickNetService", "MagickN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoStrSplit", "DemoStrSplit\DemoStrSplit.csproj", "{CD2D696D-5E91-45D5-9D54-88CFAA430AEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{80F8743C-447A-4C95-A4CF-09A02630828E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{80F8743C-447A-4C95-A4CF-09A02630828E}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{976611B4-EE47-4B91-8E31-3BBB1F151252}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{80F8743C-447A-4C95-A4CF-09A02630828E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80F8743C-447A-4C95-A4CF-09A02630828E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80F8743C-447A-4C95-A4CF-09A02630828E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{976611B4-EE47-4B91-8E31-3BBB1F151252}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{976611B4-EE47-4B91-8E31-3BBB1F151252}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{976611B4-EE47-4B91-8E31-3BBB1F151252}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{976611B4-EE47-4B91-8E31-3BBB1F151252}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
