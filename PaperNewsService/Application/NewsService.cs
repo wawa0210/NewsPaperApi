@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.Dapper.Repositories;
 using AutoMapper;
 using CommonLib.Extensions;
 using Dapper;
@@ -26,7 +27,8 @@ namespace PaperNewsService.Application
 
         public async Task<EntityNews> AddNewsAsync(EntityNews entityNews)
         {
-            var newsRep = GetRepositoryInstance<TableNews>();
+            var newsRep = IDapperRepository<TableNews>();
+            //var newsRep = GetRepositoryInstance<TableNews>();
 
             //新闻已存在，直接返回
             if (newsRep.Find(x => x.Title == entityNews.Title) != null) return entityNews;

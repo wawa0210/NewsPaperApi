@@ -5,10 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Abp.Dapper" Version="3.5.0" />
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Configgy.Microsoft.Extensions.Configuration" Version="1.0.3" />
     <PackageReference Include="Dapper" Version="1.50.4" />
-    <PackageReference Include="MySql.Data" Version="6.10.5" />
+    <PackageReference Include="MySql.Data" Version="6.10.6" />
   </ItemGroup>
 
   <ItemGroup>
