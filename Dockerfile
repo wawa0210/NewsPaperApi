@@ -16,10 +16,10 @@ COPY EmergencyEntity/EmergencyEntity.csproj EmergencyEntity/
 RUN dotnet restore -nowarn:msb3202,nu1503
 COPY . .
 WORKDIR /src/WebApi
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release -r ubuntu.16.04-x64 -o /app
 
 FROM build AS publish
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -r ubuntu.16.04-x64 -o /app
 
 FROM base AS final
 WORKDIR /app
