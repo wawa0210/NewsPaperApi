@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Filter;
 using WebApi.FrameWork;
+using AutoMapper;
+using WebApi.FrameWork.AutoMapper;
 
 namespace WebApi
 {
@@ -37,6 +39,15 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            //var config = new MapperConfiguration(cfg =>
+            //{
+            //    cfg.AddProfile<MappingProfile>();
+            //});
+            //services.AddSingleton(config);
+            //services.AddScoped<IMapper, Mapper>();
+
+            services.AddAutoMapper();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("any", builder =>
@@ -89,7 +100,7 @@ namespace WebApi
                 app.UseDeveloperExceptionPage();
             }
             app.UseCors("any");
-            MapperInit.InitMapping();
+            //MapperInit.InitMapping();
             app.UseExceptionless("riuCGjWnRDEXcvLASaeRHVdYE9OxHyFtb9SBXPvU");
             app.UseMiddleware<ExceptionHandlerMiddleWare>();
             app.UseAuthentication();
