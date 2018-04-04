@@ -1,6 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using EmergencyAccount.Entity;
 using EmergencyEntity.Configuration;
 using MediatR;
+using Infrastructure.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PaperNewsService.Application;
@@ -34,14 +40,14 @@ namespace WebApi.Controllers
         /// 获得新闻详细信息
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet, Authorize]
         [Route("{newsId}")]
         public async Task<ResponseModel> GetNewsbyIdAsync(string newsId)
         {
             if (string.IsNullOrEmpty(newsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
             return Success(await NewsService.GetNewsIntfByIdAsync(newsId));
         }
-        
+
         /// <summary>
         /// 删除新闻
         /// </summary>
@@ -89,7 +95,7 @@ namespace WebApi.Controllers
 
         private async Task UpdateNewsImgAsync(EntityNews entityNews)
         {
-            var imgUrl = UploadQiNiu(NewsService.GetNewsShareImgAsync(entityNews.Title,entityNews.ShortContent));
+            var imgUrl = UploadQiNiu(NewsService.GetNewsShareImgAsync(entityNews.Title, entityNews.ShortContent));
             await NewsService.UpateNewsImgAsync(entityNews.NewsId, imgUrl);
 
         }

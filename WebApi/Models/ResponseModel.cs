@@ -1,10 +1,18 @@
-﻿namespace WebApi.Models
+﻿using System;
+using CommonLib;
+using CommonLib.Extensions;
+
+namespace WebApi.Models
 {
     /// <summary>
     /// 请求响应(Api)
     /// </summary>
     public class ResponseModel
     {
+        public ResponseModel()
+        {
+            TimeStamp = DateTime.Now.ToTimeStamp();
+        }
         /// <summary>
         /// 错误代码
         /// </summary>
@@ -19,6 +27,14 @@
         /// 返回的数据实体
         /// </summary>
         public object Data { get; set; }
+
+        /// <summary>
+        ///时间戳
+        /// </summary>
+        public long TimeStamp
+        {
+            get; set;
+        }
 
     }
 

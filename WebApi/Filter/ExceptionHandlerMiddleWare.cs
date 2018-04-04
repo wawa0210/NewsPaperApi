@@ -6,6 +6,9 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CommonLib.Logger;
+using Exceptionless.Json;
+using Infrastructure.Exception;
+using WebApi.Models;
 
 namespace WebApi.Filter
 {
@@ -26,6 +29,13 @@ namespace WebApi.Filter
             try
             {
                 await _next(context);
+
+                var responseStatusCode = context.Response.StatusCode;
+
+                if (responseStatusCode != (int)ApiStatusEnum.Ok)
+                {
+                    throw new ApiException((ApiStatusEnum)responseStatusCode);
+                }
             }
             catch (Exception ex)
             {
@@ -41,35 +51,52 @@ namespace WebApi.Filter
         private static async Task WriteExceptionAsync(HttpContext context, Exception exception)
         {
             LogHelper.LogError("", exception);
-            LogHelper.LogInfo("asdasdhakslj");
-
-
             //记录日志
             exception.ToExceptionless().Submit();
             //返回友好的提示
             var response = context.Response;
-
-            //状态码
-            switch (exception)
-            {
-                case UnauthorizedAccessException _:
-                    response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    break;
-                case Exception _:
-                    response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;
-            }
-
             response.ContentType = context.Request.Headers["Accept"];
 
-            if (response.ContentType.ToLower() == "application/xml")
+            var objMsg = "";
+
+            if (exception is ApiException apiException)
             {
-                await response.WriteAsync(exception.Message).ConfigureAwait(false);
+                response.StatusCode = (int)apiException.ApiStatusCodeEnum;
+
+                var responseObj = new ResponseModel
+                {
+                    Message = apiException.Message,
+                    Code = (int)ErrorCodeEnum.Unauthorized
+                };
+
+                objMsg = JsonConvert.SerializeObject(responseObj);
             }
             else
             {
-                await response.WriteAsync(exception.Message);
+                //状态码
+                switch (exception)
+                {
+                    case UnauthorizedAccessException _:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        break;
+                    case Exception _:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        break;
+                }
+                objMsg = exception?.Message;
             }
+
+
+            if (response.ContentType.ToLower() == "application/xml")
+            {
+                await response.WriteAsync(exception?.Message).ConfigureAwait(false);
+            }
+            else
+            {
+                response.ContentType = "application/json";
+                await response.WriteAsync(objMsg);
+            }
+
         }
 
         /// <summary>
