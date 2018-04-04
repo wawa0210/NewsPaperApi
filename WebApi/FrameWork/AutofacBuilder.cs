@@ -1,6 +1,9 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using MediatR;
+using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace WebApi.FrameWork
@@ -26,8 +29,6 @@ namespace WebApi.FrameWork
             containbuilder.Populate(services);
             SetupResolveRules(containbuilder);
 
-            //containbuilder.RegisterType<AccountService>().As<IAccountService>().InstancePerRequest();
-
             return containbuilder.Build();
         }
 
@@ -46,5 +47,45 @@ namespace WebApi.FrameWork
                 .AsImplementedInterfaces().InstancePerLifetimeScope();
         }
 
+
+        /// <summary>
+        /// 发布订阅注入
+        /// </summary>
+        /// <param name="builder"></param>
+        private static void SetupMediatRRules(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
+                .AsImplementedInterfaces().PropertiesAutowired();
+
+            var mediatrOpenTypes = new[]
+          {
+                typeof(IRequestHandler<,>),
+                typeof(IRequestHandler<>),
+                typeof(INotificationHandler<>),
+            };
+
+            var descriptorsPaperNews = Assembly.Load("PaperNewsService");
+            foreach (var mediatrOpenType in mediatrOpenTypes)
+            {
+                builder
+                    .RegisterAssemblyTypes(descriptorsPaperNews).Where(t => t.Name.EndsWith("Commands") && !t.IsAbstract)
+                    .AsClosedTypesOf(mediatrOpenType)
+                    .AsImplementedInterfaces();
+            }
+            builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+
+            builder.Register<SingleInstanceFactory>(ctx =>
+            {
+                var c = ctx.Resolve<IComponentContext>();
+                return t => c.Resolve(t);
+            });
+
+            builder.Register<MultiInstanceFactory>(ctx =>
+            {
+                var c = ctx.Resolve<IComponentContext>();
+                return t => (IEnumerable<object>)c.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
+            });
+        }
     }
 }

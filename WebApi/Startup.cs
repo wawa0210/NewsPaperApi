@@ -39,13 +39,6 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //var config = new MapperConfiguration(cfg =>
-            //{
-            //    cfg.AddProfile<MappingProfile>();
-            //});
-            //services.AddSingleton(config);
-            //services.AddScoped<IMapper, Mapper>();
-
             services.AddAutoMapper();
 
             services.AddCors(options =>

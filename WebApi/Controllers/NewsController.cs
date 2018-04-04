@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 using EmergencyEntity.Configuration;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PaperNewsService.Application;
+using PaperNewsService.Commands.Entity;
 using PaperNewsService.Entity;
 using WebApi.Models;
 using WebApi.Qiniu;
@@ -12,20 +14,22 @@ namespace WebApi.Controllers
     [Route("v0/news")]
     public class NewsController : BaseApiController
     {
-        private INewsService NewsService { get; set; }
-        private AppSettings AppSettings { get; set; }
-      
-        private QiniuService QiniuService { get; set; }
+        public INewsService NewsService { get; set; }
+        public AppSettings AppSettings { get; set; }
+
+        public QiniuService QiniuService { get; set; }
+
+        public IMediator _mediator { get; set; }
 
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        public NewsController(IOptions<AppSettings> settings, INewsService newsService)
-        {
-            AppSettings = settings.Value;
-            NewsService = newsService;
-            QiniuService = new QiniuService(settings);
-        }
+        //public NewsController(IOptions<AppSettings> settings, INewsService newsService)
+        //{
+        //    AppSettings = settings.Value;
+        //    NewsService = newsService;
+        //    QiniuService = new QiniuService(settings);
+        //}
         /// <summary>
         /// 获得新闻详细信息
         /// </summary>
@@ -114,6 +118,7 @@ namespace WebApi.Controllers
             if (string.IsNullOrEmpty(entityNews.NewsId)) return Fail(ErrorCodeEnum.ParamIsNullArgument);
             await NewsService.UpateNewsAsync(entityNews);
             await UpdateNewsImgAsync(entityNews);
+            await _mediator.Send(new NewsChangeCommands(entityNews));
             return Success("更新成功");
         }
 

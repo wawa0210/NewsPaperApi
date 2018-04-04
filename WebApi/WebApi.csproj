@@ -21,6 +21,8 @@
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="7.3.0" />
     <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.3.0" />
+    <PackageReference Include="MediatR" Version="4.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
   </ItemGroup>
