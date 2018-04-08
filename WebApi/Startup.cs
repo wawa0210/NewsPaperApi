@@ -16,6 +16,8 @@ using WebApi.Filter;
 using WebApi.FrameWork;
 using AutoMapper;
 using WebApi.FrameWork.AutoMapper;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace WebApi
 {
@@ -44,8 +46,10 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper();
+            //替换控制器所有者
+            services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
 
+            services.AddAutoMapper();
             services.AddCors(options =>
             {
                 options.AddPolicy("any", builder =>

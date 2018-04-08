@@ -9,15 +9,15 @@ namespace WebApi.Controllers
     [Route("v0/accounts")]
     public class AccountController : BaseApiController
     {
-        private IAccountService AccountService { get; set; }
+        public IAccountService AccountService { get; set; }
 
-        /// <summary>
-        /// 初始化(autofac 已经注入)
-        /// </summary>
-        public AccountController(IAccountService iAccountService)
-        {
-            AccountService = iAccountService;
-        }
+        ///// <summary>
+        ///// 初始化(autofac 已经注入)
+        ///// </summary>
+        //public AccountController(IAccountService iAccountService)
+        //{
+        //    AccountService = iAccountService;
+        //}
 
         /// <summary>
         /// 更新密码

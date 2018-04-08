@@ -5,6 +5,7 @@ using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
+using WebApi.Controllers;
 
 namespace WebApi.FrameWork
 {
@@ -14,7 +15,7 @@ namespace WebApi.FrameWork
         {
             // Create the container builder.
             var containbuilder = new ContainerBuilder();
-
+            containbuilder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).PropertiesAutowired();
             // Register dependencies, populate the services from
             // the collection, and build the container. If you want
             // to dispose of the container at the end of the app,
@@ -27,6 +28,7 @@ namespace WebApi.FrameWork
             // AFTER Populate those registrations can override things
             // in the ServiceCollection. Mix and match as needed.
             containbuilder.Populate(services);
+
             SetupResolveRules(containbuilder);
 
             return containbuilder.Build();
@@ -39,12 +41,12 @@ namespace WebApi.FrameWork
             var descriptorsAccounts = Assembly.Load("EmergencyAccount");
             builder.RegisterAssemblyTypes(descriptorsAccounts)
                 .Where(t => t.Name.EndsWith("Service") && !t.IsAbstract)
-                .AsImplementedInterfaces().InstancePerLifetimeScope();
+                .AsImplementedInterfaces().InstancePerLifetimeScope().PropertiesAutowired();
 
             var descriptorsPaperNews = Assembly.Load("PaperNewsService");
             builder.RegisterAssemblyTypes(descriptorsPaperNews)
                 .Where(t => t.Name.EndsWith("Service") && !t.IsAbstract)
-                .AsImplementedInterfaces().InstancePerLifetimeScope();
+                .AsImplementedInterfaces().InstancePerLifetimeScope().PropertiesAutowired();
         }
 
 

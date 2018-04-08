@@ -30,10 +30,11 @@ namespace WebApi.Controllers
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        //public NewsController(IOptions<AppSettings> settings, INewsService newsService)
+        //public NewsController(IOptions<AppSettings> settings, INewsService newsService, IMediator mediator)
         //{
         //    AppSettings = settings.Value;
         //    NewsService = newsService;
+        //    _mediator = mediator;
         //    QiniuService = new QiniuService(settings);
         //}
         /// <summary>

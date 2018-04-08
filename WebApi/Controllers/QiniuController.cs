@@ -10,15 +10,15 @@ namespace WebApi.Controllers
     public class QiniuController : BaseApiController
     {
 
-        private QiniuService QiniuService { get; set; }
+        public QiniuService QiniuService { get; set; }
 
         /// <summary>
         /// 初始化(autofac 已经注入)
         /// </summary>
-        public QiniuController(IOptions<AppSettings> settings)
-        {
-            QiniuService = new QiniuService(settings);
-        }
+        //public QiniuController(IOptions<AppSettings> settings)
+        //{
+        //    QiniuService = new QiniuService(settings);
+        //}
 
         /// <summary>
         /// 获得qiniutoken信息

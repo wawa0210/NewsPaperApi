@@ -11,12 +11,12 @@ namespace WebApi.Controllers
     [Route("v0/versions")]
     public class VersionsController : BaseApiController
     {
-        private IVersionService VersionService { get; set; }
+        public IVersionService VersionService { get; set; }
 
-        public VersionsController(IVersionService versionService)
-        {
-            VersionService = versionService;
-        }
+        //public VersionsController(IVersionService versionService)
+        //{
+        //    VersionService = versionService;
+        //}
 
         /// <summary>
         /// 添加版本信息
