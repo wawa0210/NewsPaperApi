@@ -8,12 +8,12 @@ namespace CommonLib
 {
     public static class PollyManager
     {
-
         /// <summary>
         /// 带返回值重试
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="func"></param>
+        /// <param name="continueOnCapturedContext"></param>
         /// <param name="retryCount"></param>
         /// <returns></returns>
         public static async Task<T> ProcessAsync<T>(Func<Task<T>> func, bool continueOnCapturedContext = false, int retryCount = 10)
@@ -25,10 +25,7 @@ namespace CommonLib
                       .Handle<Exception>()
                       .RetryAsync(retryCount);
 
-                return await retryTimesPolicy.ExecuteAsync(async () =>
-                {
-                    return await func();
-                }, continueOnCapturedContext);
+                return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
             }
             catch (Exception ex)
             {
@@ -57,14 +54,11 @@ namespace CommonLib
                           action(ex);
                       });
 
-                return await retryTimesPolicy.ExecuteAsync(async () =>
-                {
-                    return await func();
-                }, continueOnCapturedContext);
+                return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -84,12 +78,9 @@ namespace CommonLib
                 var retryTimesPolicy =
                   Policy
                       .Handle<Exception>()
-                      .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
+                      .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
 
-                return await retryTimesPolicy.ExecuteAsync(async () =>
-                {
-                    return await func();
-                }, continueOnCapturedContext);
+                return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
             }
             catch (Exception ex)
             {
@@ -114,15 +105,12 @@ namespace CommonLib
                 var retryTimesPolicy =
                   Policy
                       .Handle<Exception>()
-                      .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
+                      .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
                       {
                           action(ex);
                       });
 
-                return await retryTimesPolicy.ExecuteAsync(async () =>
-                {
-                    return await func();
-                }, continueOnCapturedContext);
+                return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
             }
             catch (Exception ex)
             {
@@ -198,7 +186,7 @@ namespace CommonLib
                 var retryTimesPolicy =
                   Policy
                       .Handle<Exception>()
-                      .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
+                      .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
                       {
                           action(ex);
                       });
@@ -221,7 +209,7 @@ namespace CommonLib
                 var retryTimesPolicy =
                   Policy
                       .Handle<Exception>()
-                      .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
+                      .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
 
                 await retryTimesPolicy.ExecuteAsync(async () =>
                 {
@@ -254,10 +242,7 @@ namespace CommonLib
                            action(ex);
                        });
 
-                return retryTimesPolicy.Execute<T>(() =>
-                {
-                    return func();
-                });
+                return retryTimesPolicy.Execute(func);
             }
             catch (Exception ex)
             {
@@ -274,7 +259,7 @@ namespace CommonLib
                       .Handle<Exception>()
                       .RetryAsync(retryCount);
 
-                return retryTimesPolicy.Execute<T>(() =>
+                return retryTimesPolicy.Execute(() =>
                 {
                     return func();
                 });
@@ -306,7 +291,7 @@ namespace CommonLib
                           action(ex);
                       });
 
-                return retryTimesPolicy.Execute<T>(() =>
+                return retryTimesPolicy.Execute(() =>
                 {
                     return func();
                 });
@@ -334,10 +319,7 @@ namespace CommonLib
                       .Handle<Exception>()
                       .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
 
-                return retryTimesPolicy.Execute<T>(() =>
-                {
-                    return func();
-                });
+                return retryTimesPolicy.Execute(func);
             }
             catch (Exception ex)
             {
@@ -363,10 +345,7 @@ namespace CommonLib
                            actionLog(ex);
                        });
 
-                retryTimesPolicy.Execute(() =>
-                {
-                    action();
-                });
+                retryTimesPolicy.Execute(action);
             }
             catch (Exception ex)
             {
@@ -383,10 +362,7 @@ namespace CommonLib
                       .Handle<Exception>()
                       .Retry(retryCount);
 
-                retryTimesPolicy.Execute(() =>
-                {
-                    action();
-                });
+                retryTimesPolicy.Execute(action);
             }
             catch (Exception ex)
             {
@@ -414,10 +390,7 @@ namespace CommonLib
                           actionLog(ex);
                       });
 
-                retryTimesPolicy.Execute(() =>
-                {
-                    action();
-                });
+                retryTimesPolicy.Execute(action);
             }
             catch (Exception ex)
             {
@@ -440,10 +413,7 @@ namespace CommonLib
                       .Handle<Exception>()
                       .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
 
-                retryTimesPolicy.Execute(() =>
-                {
-                    action();
-                });
+                retryTimesPolicy.Execute(action);
             }
             catch (Exception ex)
             {
