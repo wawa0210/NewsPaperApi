@@ -18,19 +18,12 @@ namespace CommonLib
         /// <returns></returns>
         public static async Task<T> ProcessAsync<T>(Func<Task<T>> func, bool continueOnCapturedContext = false, int retryCount = 10)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .RetryAsync(retryCount);
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .RetryAsync(retryCount);
 
-                return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
         }
 
         /// <summary>
@@ -44,22 +37,15 @@ namespace CommonLib
         /// <returns></returns>
         public static async Task<T> ProcessAsync<T>(Func<Task<T>> func, Action<Exception> action, bool continueOnCapturedContext = false, int retryCount = 10)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .RetryAsync(retryCount, (ex, count) =>
-                      {
-                          action(ex);
-                      });
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .RetryAsync(retryCount, (ex, count) =>
+                    {
+                        action(ex);
+                    });
 
-                return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
         }
 
         /// <summary>
@@ -73,19 +59,13 @@ namespace CommonLib
         /// <returns></returns>
         public static async Task<T> ProcessAsync<T>(Func<Task<T>> func, bool continueOnCapturedContext = false, int retryCount = 10, int powerVal = 2)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
+            if (powerVal <= 0) throw new ArgumentOutOfRangeException(nameof(powerVal));
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
 
-                return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
         }
 
         /// <summary>
@@ -100,22 +80,16 @@ namespace CommonLib
         /// <returns></returns>
         public static async Task<T> ProcessAsync<T>(Func<Task<T>> func, Action<Exception> action, bool continueOnCapturedContext = false, int retryCount = 10, int powerVal = 2)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
-                      {
-                          action(ex);
-                      });
+            if (powerVal <= 0) throw new ArgumentOutOfRangeException(nameof(powerVal));
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
+                    {
+                        action(ex);
+                    });
 
-                return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return await retryTimesPolicy.ExecuteAsync(async () => await func(), continueOnCapturedContext);
         }
 
 
@@ -129,45 +103,31 @@ namespace CommonLib
         /// <returns></returns>
         public static async Task ProcessAsync(Func<Task> func, Action<Exception> action, bool continueOnCapturedContext = false, int retryCount = 10)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                       .RetryAsync(retryCount, (ex, count) =>
-                       {
-                           action(ex);
-                       });
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .RetryAsync(retryCount, (ex, count) =>
+                    {
+                        action(ex);
+                    });
 
-                await retryTimesPolicy.ExecuteAsync(async () =>
-                {
-                    await func();
-                }, continueOnCapturedContext);
-            }
-            catch (Exception ex)
+            await retryTimesPolicy.ExecuteAsync(async () =>
             {
-                throw ex;
-            }
+                await func();
+            }, continueOnCapturedContext);
         }
 
         public static async Task ProcessAsync(Func<Task> func, bool continueOnCapturedContext = false, int retryCount = 10)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .RetryAsync(retryCount);
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .RetryAsync(retryCount);
 
-                await retryTimesPolicy.ExecuteAsync(async () =>
-                {
-                    await func();
-                }, continueOnCapturedContext);
-            }
-            catch (Exception ex)
+            await retryTimesPolicy.ExecuteAsync(async () =>
             {
-                throw ex;
-            }
+                await func();
+            }, continueOnCapturedContext);
         }
 
         /// <summary>
@@ -181,45 +141,33 @@ namespace CommonLib
         /// <returns></returns>
         public static async Task ProcessAsync(Func<Task> func, Action<Exception> action, bool continueOnCapturedContext = false, int retryCount = 10, int powerVal = 2)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
-                      {
-                          action(ex);
-                      });
+            if (powerVal <= 0) throw new ArgumentOutOfRangeException(nameof(powerVal));
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
+                    {
+                        action(ex);
+                    });
 
-                await retryTimesPolicy.ExecuteAsync(async () =>
-                {
-                    await func();
-                }, continueOnCapturedContext);
-            }
-            catch (Exception ex)
+            await retryTimesPolicy.ExecuteAsync(async () =>
             {
-                throw ex;
-            }
+                await func();
+            }, continueOnCapturedContext);
         }
 
         public static async Task ProcessAsync(Func<Task> func, bool continueOnCapturedContext = false, int retryCount = 10, int powerVal = 2)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
+            if (powerVal <= 0) throw new ArgumentOutOfRangeException(nameof(powerVal));
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
 
-                await retryTimesPolicy.ExecuteAsync(async () =>
-                {
-                    await func();
-                }, continueOnCapturedContext);
-            }
-            catch (Exception ex)
+            await retryTimesPolicy.ExecuteAsync(async () =>
             {
-                throw ex;
-            }
+                await func();
+            }, continueOnCapturedContext);
         }
 
         /// <summary>
@@ -232,42 +180,25 @@ namespace CommonLib
         /// <returns></returns>
         public static T Process<T>(Func<T> func, Action<Exception> action, int retryCount = 10)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                       .Retry(retryCount, (ex, count) =>
-                       {
-                           action(ex);
-                       });
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .Retry(retryCount, (ex, count) =>
+                    {
+                        action(ex);
+                    });
 
-                return retryTimesPolicy.Execute(func);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return retryTimesPolicy.Execute(func);
         }
 
         public static T Process<T>(Func<T> func, int retryCount = 10)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .RetryAsync(retryCount);
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .RetryAsync(retryCount);
 
-                return retryTimesPolicy.Execute(() =>
-                {
-                    return func();
-                });
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return retryTimesPolicy.Execute(func);
         }
 
         /// <summary>
@@ -281,25 +212,19 @@ namespace CommonLib
         /// <returns></returns>
         public static T Process<T>(Func<T> func, Action<Exception> action, int retryCount = 10, int powerVal = 2)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
-                      {
-                          action(ex);
-                      });
+            if (powerVal <= 0) throw new ArgumentOutOfRangeException(nameof(powerVal));
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
+                    {
+                        action(ex);
+                    });
 
-                return retryTimesPolicy.Execute(() =>
-                {
-                    return func();
-                });
-            }
-            catch (Exception ex)
+            return retryTimesPolicy.Execute(() =>
             {
-                throw ex;
-            }
+                return func();
+            });
         }
 
         /// <summary>
@@ -312,19 +237,13 @@ namespace CommonLib
         /// <returns></returns>
         public static T Process<T>(Func<T> func, int retryCount = 10, int powerVal = 2)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
+            if (powerVal <= 0) throw new ArgumentOutOfRangeException(nameof(powerVal));
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
 
-                return retryTimesPolicy.Execute(func);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return retryTimesPolicy.Execute(func);
         }
 
         /// <summary>
@@ -335,39 +254,25 @@ namespace CommonLib
         /// <param name="retryCount">重试次数</param>
         public static void Process(Action action, Action<Exception> actionLog, int retryCount = 10)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                       .Retry(retryCount, (ex, count) =>
-                       {
-                           actionLog(ex);
-                       });
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .Retry(retryCount, (ex, count) =>
+                    {
+                        actionLog(ex);
+                    });
 
-                retryTimesPolicy.Execute(action);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            retryTimesPolicy.Execute(action);
         }
 
         public static void Process(Action action, int retryCount = 10)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .Retry(retryCount);
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .Retry(retryCount);
 
-                retryTimesPolicy.Execute(action);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            retryTimesPolicy.Execute(action);
         }
 
 
@@ -380,22 +285,16 @@ namespace CommonLib
         /// <param name="powerVal"></param>
         public static void Process(Action action, Action<Exception> actionLog, int retryCount = 10, int powerVal = 2)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
-                      {
-                          actionLog(ex);
-                      });
+            if (powerVal <= 0) throw new ArgumentOutOfRangeException(nameof(powerVal));
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)), (ex, timeSpan) =>
+                    {
+                        actionLog(ex);
+                    });
 
-                retryTimesPolicy.Execute(action);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            retryTimesPolicy.Execute(action);
         }
 
         /// <summary>
@@ -406,19 +305,13 @@ namespace CommonLib
         /// <param name="powerVal">加权数量</param>
         public static void Process(Action action, int retryCount = 10, int powerVal = 2)
         {
-            try
-            {
-                var retryTimesPolicy =
-                  Policy
-                      .Handle<Exception>()
-                      .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
+            if (powerVal <= 0) throw new ArgumentOutOfRangeException(nameof(powerVal));
+            var retryTimesPolicy =
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(powerVal, retryAttempt)));
 
-                retryTimesPolicy.Execute(action);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            retryTimesPolicy.Execute(action);
         }
     }
 }
