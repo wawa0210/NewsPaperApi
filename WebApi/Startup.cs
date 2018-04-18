@@ -18,6 +18,10 @@ using AutoMapper;
 using WebApi.FrameWork.AutoMapper;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using zipkin4net;
+using zipkin4net.Middleware;
+using zipkin4net.Tracers.Zipkin;
+using zipkin4net.Transport.Http;
 
 namespace WebApi
 {
@@ -102,6 +106,27 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
+
+            var applicationName ="node1";
+            loggerFactory.AddConsole();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            var lifetime = app.ApplicationServices.GetService<IApplicationLifetime>();
+            lifetime.ApplicationStarted.Register(() => {
+                TraceManager.SamplingRate = 1.0f;
+                var logger = new TracingLogger(loggerFactory, "zipkin4net");
+                var httpSender = new HttpZipkinSender("http://localhost:9411", "application/json");
+                var tracer = new ZipkinTracer(httpSender, new JSONSpanSerializer());
+                TraceManager.RegisterTracer(tracer);
+                TraceManager.Start(logger);
+            });
+            lifetime.ApplicationStopped.Register(() => TraceManager.Stop());
+            app.UseTracing(applicationName);
+
 
             if (env.IsDevelopment())
             {
